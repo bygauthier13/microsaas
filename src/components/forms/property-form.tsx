@@ -1,9 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Alert, Field, Input, Select, Textarea } from "@/components/ui";
-import { SubmitButton } from "@/components/submit-button";
+import { FormPendingContext, SubmitButton } from "@/components/submit-button";
+import { useFormAction } from "@/components/forms/use-form-action";
 import { useToast } from "@/components/toast";
 import { savePropertyAction } from "@/lib/actions/org";
 import type { ActionState } from "@/lib/actions/helpers";
@@ -37,7 +38,7 @@ export function PropertyForm({
   const toast = useToast();
   const router = useRouter();
   const ref = useRef<HTMLFormElement>(null);
-  const [state, action] = useActionState<ActionState, FormData>(async (prev: ActionState, fd: FormData) => {
+  const { state, pending, onSubmit } = useFormAction<ActionState>(async (prev, fd) => {
     const res = await savePropertyAction(prev, fd);
     if (res.ok && res.message) toast(res.message);
     return res;
@@ -54,7 +55,8 @@ export function PropertyForm({
   }, [state, values.id, onDoneHref, router, landlords.length]);
 
   return (
-    <form ref={ref} action={action} className="space-y-4">
+    <FormPendingContext.Provider value={pending}>
+    <form ref={ref} onSubmit={onSubmit} className="space-y-4">
       {values.id ? <input type="hidden" name="propertyId" value={values.id} /> : null}
       {state.error ? <Alert tone="bad">{state.error}</Alert> : null}
       <div className="grid gap-4 sm:grid-cols-2">
@@ -127,5 +129,6 @@ export function PropertyForm({
       </div>
       <SubmitButton pendingLabel="Saving…">{values.id ? "Save changes" : "Add home"}</SubmitButton>
     </form>
+    </FormPendingContext.Provider>
   );
 }

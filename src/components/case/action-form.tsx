@@ -1,6 +1,8 @@
 "use client";
 
-import { useActionState, useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
+import { FormPendingContext } from "@/components/submit-button";
+import { useFormAction } from "@/components/forms/use-form-action";
 import { Alert } from "@/components/ui";
 import { useToast } from "@/components/toast";
 import type { ActionState } from "@/lib/actions/helpers";
@@ -23,7 +25,7 @@ export function ActionForm({
   encType?: "multipart/form-data";
 }) {
   const toast = useToast();
-  const [state, formAction] = useActionState<ActionState, FormData>(async (prev: ActionState, fd: FormData) => {
+  const { state, pending, onSubmit } = useFormAction<ActionState>(async (prev, fd) => {
     const result = await action(prev, fd);
     // Confirm via the layout-level toast: this form may unmount once its step is complete.
     if (result.ok && result.message && !/https?:\/\//.test(result.message)) toast(result.message);
@@ -34,19 +36,21 @@ export function ActionForm({
     if (state.ok && resetOnSuccess) ref.current?.reset();
   }, [state, resetOnSuccess]);
   return (
-    <form ref={ref} action={formAction} className={className} encType={encType}>
-      {state.error ? (
-        <Alert tone="bad" className="mb-4">
-          {state.error}
-        </Alert>
-      ) : null}
-      {state.ok && state.message ? (
-        <Alert tone="ok" className="mb-4">
-          <Linkify text={state.message} />
-        </Alert>
-      ) : null}
-      {children}
-    </form>
+    <FormPendingContext.Provider value={pending}>
+      <form ref={ref} onSubmit={onSubmit} className={className} encType={encType}>
+        {state.error ? (
+          <Alert tone="bad" className="mb-4">
+            {state.error}
+          </Alert>
+        ) : null}
+        {state.ok && state.message ? (
+          <Alert tone="ok" className="mb-4">
+            <Linkify text={state.message} />
+          </Alert>
+        ) : null}
+        {children}
+      </form>
+    </FormPendingContext.Provider>
   );
 }
 

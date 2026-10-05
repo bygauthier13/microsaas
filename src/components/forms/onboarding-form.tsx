@@ -1,19 +1,21 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useState } from "react";
 import clsx from "clsx";
 import { Alert, Field, Input } from "@/components/ui";
-import { SubmitButton } from "@/components/submit-button";
+import { FormPendingContext, SubmitButton } from "@/components/submit-button";
+import { useFormAction } from "@/components/forms/use-form-action";
 import { onboardingAction } from "@/lib/actions/org";
 import type { ActionState } from "@/lib/actions/helpers";
 import { ORG_KINDS } from "@/lib/domain";
 
 export function OnboardingForm({ defaultName, defaultEmail }: { defaultName: string; defaultEmail: string }) {
-  const [state, action] = useActionState<ActionState, FormData>(onboardingAction, {});
+  const { state, pending, onSubmit } = useFormAction<ActionState>(onboardingAction, {});
   const [kind, setKind] = useState<string>("letting_agent");
   const [jurisdiction, setJurisdiction] = useState<string>("scotland");
   return (
-    <form action={action} className="space-y-7">
+    <FormPendingContext.Provider value={pending}>
+    <form onSubmit={onSubmit} className="space-y-7">
       {state.error ? <Alert tone="bad">{state.error}</Alert> : null}
 
       <fieldset>
@@ -81,5 +83,6 @@ export function OnboardingForm({ defaultName, defaultEmail }: { defaultName: str
 
       <SubmitButton size="lg" pendingLabel="Setting up…">Continue — log your first report</SubmitButton>
     </form>
+    </FormPendingContext.Provider>
   );
 }

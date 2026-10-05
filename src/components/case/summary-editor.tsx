@@ -2,9 +2,10 @@
 
 import clsx from "clsx";
 import { CheckCircle2, CircleAlert, Loader2, RotateCcw, Sparkles } from "lucide-react";
-import { useActionState, useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { Alert, Button, Field, Input, Select, Textarea } from "@/components/ui";
-import { SubmitButton } from "@/components/submit-button";
+import { FormPendingContext, SubmitButton } from "@/components/submit-button";
+import { useFormAction } from "@/components/forms/use-form-action";
 import { useToast } from "@/components/toast";
 import { issueSummaryAction } from "@/lib/actions/cases";
 import { improveSummaryAction } from "@/lib/actions/documents";
@@ -26,7 +27,7 @@ export function SummaryEditor(props: {
   reissue?: boolean;
 }) {
   const toast = useToast();
-  const [state, formAction] = useActionState<ActionState, FormData>(async (prev: ActionState, fd: FormData) => {
+  const { state, pending, onSubmit } = useFormAction<ActionState>(async (prev, fd) => {
     const result = await issueSummaryAction(prev, fd);
     if (result.ok && result.message) toast(result.message);
     return result;
@@ -56,7 +57,8 @@ export function SummaryEditor(props: {
   }
 
   return (
-    <form action={formAction} className="space-y-5">
+    <FormPendingContext.Provider value={pending}>
+    <form onSubmit={onSubmit} className="space-y-5">
       <input type="hidden" name="caseId" value={props.caseId} />
       {state.error ? <Alert tone="bad">{state.error}</Alert> : null}
       {state.ok && state.message ? <Alert tone="ok">{state.message}</Alert> : null}
@@ -195,5 +197,6 @@ export function SummaryEditor(props: {
         </p>
       </div>
     </form>
+    </FormPendingContext.Provider>
   );
 }

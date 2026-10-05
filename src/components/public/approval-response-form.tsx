@@ -1,14 +1,15 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { Alert, Field, Input, Textarea } from "@/components/ui";
-import { SubmitButton } from "@/components/submit-button";
+import { FormPendingContext, SubmitButton } from "@/components/submit-button";
+import { useFormAction } from "@/components/forms/use-form-action";
 import { respondApprovalAction } from "@/lib/actions/approvals";
 import type { ActionState } from "@/lib/actions/helpers";
 
 export function ApprovalResponseForm({ token, landlordName }: { token: string; landlordName: string }) {
-  const [state, action] = useActionState<ActionState, FormData>(respondApprovalAction, {});
+  const { state, pending, onSubmit } = useFormAction<ActionState>(respondApprovalAction, {});
   const [decision, setDecision] = useState<"approved" | "declined">("approved");
 
   if (state.ok) {
@@ -22,7 +23,8 @@ export function ApprovalResponseForm({ token, landlordName }: { token: string; l
   }
 
   return (
-    <form action={action} className="card space-y-4 p-5 sm:p-6">
+    <FormPendingContext.Provider value={pending}>
+    <form onSubmit={onSubmit} className="card space-y-4 p-5 sm:p-6">
       <input type="hidden" name="token" value={token} />
       <input type="hidden" name="decision" value={decision} />
       {state.error ? <Alert tone="bad">{state.error}</Alert> : null}
@@ -67,5 +69,6 @@ export function ApprovalResponseForm({ token, landlordName }: { token: string; l
         {decision === "approved" ? "Confirm approval" : "Confirm decline"}
       </SubmitButton>
     </form>
+    </FormPendingContext.Provider>
   );
 }

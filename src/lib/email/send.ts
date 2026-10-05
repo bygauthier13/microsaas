@@ -61,6 +61,8 @@ export async function sendEmail(input: EmailInput): Promise<EmailResult> {
     result = { status: "logged" };
     if (!env.isProduction) {
       console.info(`[email:outbox] to=${input.to} subject="${input.subject}"`);
+      // Local development without an email provider: print account emails so links can be followed.
+      if (input.category === "password_reset") console.info(input.text);
     }
   }
 

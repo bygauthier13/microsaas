@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Alert, Field, Input, Select, Textarea } from "@/components/ui";
-import { SubmitButton } from "@/components/submit-button";
+import { FormPendingContext, SubmitButton } from "@/components/submit-button";
+import { useFormAction } from "@/components/forms/use-form-action";
 import { ClockStrip } from "@/components/duty";
 import { createCaseAction } from "@/lib/actions/cases";
 import type { ActionState } from "@/lib/actions/helpers";
@@ -28,7 +29,7 @@ export function NewCaseForm(props: {
   nowTime: string;
   preselectPropertyId?: string;
 }) {
-  const [state, action] = useActionState<ActionState, FormData>(createCaseAction, {});
+  const { state, pending, onSubmit } = useFormAction<ActionState>(createCaseAction, {});
   const [propertyId, setPropertyId] = useState(props.preselectPropertyId ?? (props.properties.length ? props.properties[0].id : "new"));
   const [jurisdiction, setJurisdiction] = useState(props.defaultJurisdiction);
   const [sector, setSector] = useState(props.defaultSector);
@@ -53,7 +54,8 @@ export function NewCaseForm(props: {
   }, [date, time, effJurisdiction, effSector, hazard, triage]);
 
   return (
-    <form action={action} className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+    <FormPendingContext.Provider value={pending}>
+    <form onSubmit={onSubmit} className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
       <div className="space-y-8 min-w-0">
         {state.error ? <Alert tone="bad">{state.error}</Alert> : null}
 
@@ -215,5 +217,6 @@ export function NewCaseForm(props: {
         </div>
       </aside>
     </form>
+    </FormPendingContext.Provider>
   );
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
 import { Alert, Field, Input } from "@/components/ui";
-import { SubmitButton } from "@/components/submit-button";
+import { FormPendingContext, SubmitButton } from "@/components/submit-button";
+import { useFormAction } from "@/components/forms/use-form-action";
 import {
   forgotPasswordAction,
   loginAction,
@@ -15,9 +15,10 @@ import {
 const initial: FormState = {};
 
 export function LoginForm({ next, expired }: { next?: string; expired?: boolean }) {
-  const [state, action] = useActionState(loginAction, initial);
+  const { state, pending, onSubmit } = useFormAction<FormState>(loginAction, initial);
   return (
-    <form action={action} className="space-y-4" noValidate>
+    <FormPendingContext.Provider value={pending}>
+    <form onSubmit={onSubmit} className="space-y-4" noValidate>
       {expired ? <Alert tone="info">Your session ended. Please sign in again.</Alert> : null}
       {state.error ? <Alert tone="bad">{state.error}</Alert> : null}
       <input type="hidden" name="next" value={next ?? "/app"} />
@@ -39,13 +40,15 @@ export function LoginForm({ next, expired }: { next?: string; expired?: boolean 
       </Field>
       <SubmitButton className="w-full" pendingLabel="Signing in…">Sign in</SubmitButton>
     </form>
+    </FormPendingContext.Provider>
   );
 }
 
 export function SignupForm({ source }: { source?: string }) {
-  const [state, action] = useActionState(signupAction, initial);
+  const { state, pending, onSubmit } = useFormAction<FormState>(signupAction, initial);
   return (
-    <form action={action} className="space-y-4" noValidate>
+    <FormPendingContext.Provider value={pending}>
+    <form onSubmit={onSubmit} className="space-y-4" noValidate>
       {state.error ? <Alert tone="bad">{state.error}</Alert> : null}
       <input type="hidden" name="source" value={source ?? ""} />
       <Field label="Your name" htmlFor="name">
@@ -64,13 +67,15 @@ export function SignupForm({ source }: { source?: string }) {
         <Link href="/legal/privacy" className="underline underline-offset-2">privacy notice</Link>.
       </p>
     </form>
+    </FormPendingContext.Provider>
   );
 }
 
 export function ForgotPasswordForm() {
-  const [state, action] = useActionState(forgotPasswordAction, initial);
+  const { state, pending, onSubmit } = useFormAction<FormState>(forgotPasswordAction, initial);
   return (
-    <form action={action} className="space-y-4" noValidate>
+    <FormPendingContext.Provider value={pending}>
+    <form onSubmit={onSubmit} className="space-y-4" noValidate>
       {state.error ? <Alert tone="bad">{state.error}</Alert> : null}
       {state.message ? <Alert tone="ok">{state.message}</Alert> : null}
       <Field label="Work email" htmlFor="email">
@@ -78,13 +83,15 @@ export function ForgotPasswordForm() {
       </Field>
       <SubmitButton className="w-full" pendingLabel="Sending…">Email me a reset link</SubmitButton>
     </form>
+    </FormPendingContext.Provider>
   );
 }
 
 export function ResetPasswordForm({ token }: { token: string }) {
-  const [state, action] = useActionState(resetPasswordAction, initial);
+  const { state, pending, onSubmit } = useFormAction<FormState>(resetPasswordAction, initial);
   return (
-    <form action={action} className="space-y-4" noValidate>
+    <FormPendingContext.Provider value={pending}>
+    <form onSubmit={onSubmit} className="space-y-4" noValidate>
       {state.error ? <Alert tone="bad">{state.error}</Alert> : null}
       <input type="hidden" name="token" value={token} />
       <Field label="New password" htmlFor="password" hint="At least 10 characters. You'll be signed out of other devices.">
@@ -92,5 +99,6 @@ export function ResetPasswordForm({ token }: { token: string }) {
       </Field>
       <SubmitButton className="w-full" pendingLabel="Saving…">Save new password</SubmitButton>
     </form>
+    </FormPendingContext.Provider>
   );
 }
