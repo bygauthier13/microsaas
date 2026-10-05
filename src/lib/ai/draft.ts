@@ -11,6 +11,7 @@
 import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { env } from "@/lib/env";
+import { buildRedactor } from "./redact";
 
 export type DraftStyle = "plain" | "concise" | "formal";
 
@@ -82,13 +83,7 @@ export async function improveLetterWithAi(input: AiDraftInput): Promise<AiDraftR
     return { ok: false, reason: "not_configured", message: "AI drafting isn't switched on for this workspace." };
   }
 
-  // Swap personal details for tokens (longest first so a full address wins over its first line).
-  const pairs = input.redact
-    .filter((p): p is [string, string] => typeof p[0] === "string" && p[0].trim().length >= 2)
-    .map(([value, name]) => [value.trim(), `⟦${name}⟧`] as const)
-    .sort((a, b) => b[0].length - a[0].length);
-  const redact = (s: string) => pairs.reduce((acc, [value, token]) => acc.split(value).join(token), s);
-  const restore = (s: string) => pairs.reduce((acc, [value, token]) => acc.split(token).join(value), s);
+  const { redact, restore } = buildRedactor(input.redact);
 
   const facts = input.facts
     .filter(([, v]) => v != null && String(v).trim() !== "")
@@ -129,9 +124,7 @@ export async function improveLetterWithAi(input: AiDraftInput): Promise<AiDraftR
       return { ok: false, reason: "empty", message: "The AI returned an unusable draft. Your draft is unchanged." };
     }
     const servedByFallback = (message.usage.iterations ?? []).some((it) => it.type === "fallback_message");
-    // Restore personal details; any token the model invented becomes a visible placeholder.
-    const restored = restore(text).replace(/⟦([A-Z_]+)⟧/g, (_m, name: string) => `[${name.toLowerCase().replace(/_/g, " ")}]`);
-    return { ok: true, text: restored, model: message.model, servedByFallback };
+    return { ok: true, text: restore(text), model: message.model, servedByFallback };
   } catch (err) {
     if (err instanceof Anthropic.AuthenticationError) {
       console.error("[ai] authentication failed — check ANTHROPIC_API_KEY");

@@ -3,10 +3,18 @@ import path from "node:path";
 
 export default defineConfig({
   resolve: {
-    alias: { "@": path.resolve(__dirname, "src") },
+    alias: {
+      "@": path.resolve(import.meta.dirname, "src"),
+      // `server-only` throws outside a React Server environment; tests run server code directly.
+      "server-only": path.resolve(import.meta.dirname, "tests/stubs/server-only.ts"),
+    },
   },
   test: {
     include: ["tests/**/*.test.ts"],
     environment: "node",
+    testTimeout: 60_000,
+    hookTimeout: 60_000,
+    // Integration tests share one embedded database per file; keep files sequential.
+    fileParallelism: false,
   },
 });

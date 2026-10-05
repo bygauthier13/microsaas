@@ -69,8 +69,9 @@ export async function runDailyJobs(now = new Date()): Promise<DailyReport> {
   for (const org of orgs) {
     const access = orgAccess(org, now);
 
-    // 2. Digest (weekdays, opted-in, workspace in good standing).
-    if (weekday && org.settings?.digestEnabled !== false && access.canCreate) {
+    // 2. Digest (weekdays, opted-in). Sent even after a trial ends: the statutory deadlines on
+    //    existing cases keep running, and a missed one hurts the tenant and the customer alike.
+    if (weekday && org.settings?.digestEnabled !== false) {
       const items = (await listCases(org.id, { now }))
         .filter((i) => ["overdue", "due_today", "due_soon"].includes(i.evaluation.overall) && i.evaluation.nextDuty)
         .map((i) => {
