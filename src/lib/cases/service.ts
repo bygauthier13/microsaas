@@ -11,6 +11,7 @@ import {
   cases,
   documents,
   landlords,
+  organizations,
   properties,
 } from "@/lib/db/schema";
 import { evaluateCase, type CaseEvaluation, type CaseFacts, type DutyKey } from "@/lib/rules/engine";
@@ -23,8 +24,9 @@ export type DelayRow = typeof caseDelays.$inferSelect;
 export type EventRow = typeof caseEvents.$inferSelect;
 export type ApprovalRow = typeof approvalRequests.$inferSelect;
 
-export function toFacts(c: CaseRow, p: PropertyRow, delays: DelayRow[]): CaseFacts {
+export function toFacts(c: CaseRow, p: PropertyRow, delays: DelayRow[], opts: { demo?: boolean } = {}): CaseFacts {
   return {
+    assumeInForce: Boolean(opts.demo),
     jurisdiction: p.jurisdiction,
     sector: p.sector,
     hazard: c.hazard as HazardKey,
@@ -89,6 +91,7 @@ export async function listCases(
       ),
   ]);
   const now = opts.now ?? new Date();
+  const demo = await isDemoOrg(db, orgId);
   return rows.map((r) => ({
     ...r,
     evaluation: evaluateCase(
@@ -96,6 +99,7 @@ export async function listCases(
         r.case,
         r.property,
         delayRows.filter((d) => d.caseId === r.case.id),
+        { demo },
       ),
       now,
     ),
@@ -154,8 +158,14 @@ export async function getCaseDetail(orgId: string, caseId: string, now = new Dat
     events,
     documents: docs,
     approvals,
-    evaluation: evaluateCase(toFacts(row.case, row.property, delays), now),
+    evaluation: evaluateCase(toFacts(row.case, row.property, delays, { demo: await isDemoOrg(db, orgId) }), now),
   };
+}
+
+/** Demo workspaces evaluate cases as if the 2026 Regulations already apply (see CaseFacts). */
+export async function isDemoOrg(db: DB, orgId: string): Promise<boolean> {
+  const [row] = await db.select({ isDemo: organizations.isDemo }).from(organizations).where(eq(organizations.id, orgId)).limit(1);
+  return Boolean(row?.isDemo);
 }
 
 export async function addEvent(

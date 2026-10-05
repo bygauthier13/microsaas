@@ -163,46 +163,32 @@ export function holidaysInRange(
   return out;
 }
 
-const longDate = new Intl.DateTimeFormat("en-GB", {
-  timeZone: "UTC",
-  weekday: "short",
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-});
+// Formatting is done by hand rather than with Intl: Node and browsers ship different ICU data
+// (e.g. "Tuesday, 20 October" vs "Tuesday 20 October"), which breaks hydration and makes
+// letters render differently depending on where they were generated.
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+function parts(dateIso: string) {
+  const [y, m, d] = dateIso.split("-").map(Number);
+  return { y, m, d, w: new Date(Date.UTC(y, m - 1, d)).getUTCDay() };
+}
 
 /** "Tue 20 Oct 2026" for an ISO calendar date. */
 export function formatIsoDate(dateIso: string): string {
-  const [y, m, d] = dateIso.split("-").map(Number);
-  return longDate.format(new Date(Date.UTC(y, m - 1, d)));
+  const { y, m, d, w } = parts(dateIso);
+  return `${WEEKDAYS[w].slice(0, 3)} ${d} ${MONTHS[m - 1].slice(0, 3)} ${y}`;
 }
-
-const fullDate = new Intl.DateTimeFormat("en-GB", {
-  timeZone: "UTC",
-  weekday: "long",
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
 
 /** "Tuesday 20 October 2026" for letters. */
 export function formatIsoDateLong(dateIso: string): string {
-  const [y, m, d] = dateIso.split("-").map(Number);
-  return fullDate.format(new Date(Date.UTC(y, m - 1, d)));
+  const { y, m, d, w } = parts(dateIso);
+  return `${WEEKDAYS[w]} ${d} ${MONTHS[m - 1]} ${y}`;
 }
-
-const dateTimeFmt = new Intl.DateTimeFormat("en-GB", {
-  timeZone: LONDON_TZ,
-  weekday: "short",
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-  hourCycle: "h23",
-});
 
 /** "Tue 20 Oct 2026, 14:05" in UK time. */
 export function formatInstant(instant: Date): string {
-  return dateTimeFmt.format(instant);
+  const p = londonParts(instant);
+  const iso = `${p.year}-${String(p.month).padStart(2, "0")}-${String(p.day).padStart(2, "0")}`;
+  return `${formatIsoDate(iso)}, ${String(p.hour).padStart(2, "0")}:${String(p.minute).padStart(2, "0")}`;
 }

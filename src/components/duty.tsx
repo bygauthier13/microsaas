@@ -62,7 +62,7 @@ export function countdown(d: DutyResult): string {
 export function dueLabel(d: DutyResult): string {
   if (d.dueAt) return formatInstant(d.dueAt);
   if (d.dueDate) return formatIsoDate(d.dueDate);
-  if (d.dueKind === "reasonable") return "Reasonable time";
+  if (d.dueKind === "reasonable") return "As soon as practicable";
   return "—";
 }
 

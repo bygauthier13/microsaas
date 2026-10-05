@@ -58,11 +58,49 @@ async function init(): Promise<DB> {
   ]);
   const dir = process.env.PGLITE_DIR ?? path.join(process.cwd(), ".data", "pglite");
   fs.mkdirSync(dir, { recursive: true });
+  acquirePgliteLock(dir);
   const client = new PGlite(dir);
   const db = drizzle(client, { schema });
   await migrate(db, { migrationsFolder: migrationsFolder() });
   globalForDb.__repairclockDbKind = "pglite";
   return db as unknown as DB;
+}
+
+/**
+ * The embedded database is single-process: two processes opening the same directory can
+ * corrupt it. A pid lock file makes a second process (e.g. a CLI script while `next dev` is
+ * running) fail fast with a clear message instead.
+ */
+function acquirePgliteLock(dir: string) {
+  const lockPath = `${dir}.lock`;
+  try {
+    const holder = Number(fs.readFileSync(lockPath, "utf8"));
+    if (holder && holder !== process.pid) {
+      let alive = false;
+      try {
+        process.kill(holder, 0);
+        alive = true;
+      } catch {
+        alive = false;
+      }
+      if (alive) {
+        throw new Error(
+          `The embedded database (${dir}) is in use by another process (pid ${holder}). Stop that process first, ` +
+            "use the HTTP endpoint instead (e.g. GET /api/cron/daily), or set DATABASE_URL to a Postgres database.",
+        );
+      }
+    }
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code !== "ENOENT") throw err;
+  }
+  fs.writeFileSync(lockPath, String(process.pid));
+  process.once("exit", () => {
+    try {
+      if (fs.readFileSync(lockPath, "utf8") === String(process.pid)) fs.unlinkSync(lockPath);
+    } catch {
+      // already gone
+    }
+  });
 }
 
 /** Shared database handle (one per process). */

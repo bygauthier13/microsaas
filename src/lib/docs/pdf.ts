@@ -250,7 +250,7 @@ const STATUS_TEXT: Record<string, string> = {
 function dueText(d: DutyResult): string {
   if (d.dueAt) return formatInstant(d.dueAt);
   if (d.dueDate) return `${formatIsoDate(d.dueDate)}${d.dueKind === "reasonable" ? " (own target)" : ""}`;
-  if (d.dueKind === "reasonable") return "Reasonable time";
+  if (d.dueKind === "reasonable") return "As soon as reasonably practicable";
   return "—";
 }
 

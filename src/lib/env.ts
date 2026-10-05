@@ -34,6 +34,9 @@ export const env = {
   get allowSimulatedBilling(): boolean {
     return !this.isProduction || process.env.ALLOW_SIMULATED_BILLING === "true";
   },
+  get stripePortalConfiguration() {
+    return str("STRIPE_PORTAL_CONFIGURATION_ID");
+  },
   stripePrice(plan: string, interval: "month" | "year"): string | undefined {
     return str(`STRIPE_PRICE_${plan.toUpperCase()}_${interval === "month" ? "MONTHLY" : "ANNUAL"}`);
   },
@@ -57,6 +60,15 @@ export const env = {
   },
   get posthogHost(): string {
     return str("POSTHOG_HOST") ?? "https://eu.i.posthog.com";
+  },
+  // Legal entity shown on the privacy notice and terms (set before launch).
+  get company() {
+    return {
+      name: str("COMPANY_NAME") ?? "[Company name to be added]",
+      number: str("COMPANY_NUMBER") ?? "[company number]",
+      address: str("COMPANY_ADDRESS") ?? "[registered office address]",
+      email: str("SUPPORT_EMAIL") ?? "hello@repairclock.co.uk",
+    };
   },
   // Ops
   get cronSecret() {

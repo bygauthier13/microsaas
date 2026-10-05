@@ -178,7 +178,7 @@ export default async function CasePage({ params, searchParams }: PageProps<"/app
       {sp.created === "1" ? (
         <Alert tone="ok" title="Report logged — the statutory clock is running">
           Every deadline below is calculated in working days from the day after you became aware, skipping weekends and{" "}
-          {scotland ? "Scottish" : "English"} bank holidays. You&apos;ll get a digest email each morning while anything is due.
+          {scotland ? "Scottish" : "English"} bank holidays. You&apos;ll get a digest email each weekday morning while anything is due.
         </Alert>
       ) : null}
       {closed ? (

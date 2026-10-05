@@ -126,7 +126,7 @@ export function TargetForm({ caseId, current }: { caseId: string; current: strin
   return (
     <ActionForm action={setTargetAction} className="flex flex-wrap items-end gap-3">
       <input type="hidden" name="caseId" value={caseId} />
-      <Field label="Your target completion date" htmlFor="target" hint="Private landlords must complete repairs within a reasonable time — record the target you're working to.">
+      <Field label="Your target completion date" htmlFor="target" hint="Private landlords must complete repairs as soon as reasonably practicable — record the target you're working to.">
         <Input id="target" name="target" type="date" defaultValue={current ?? undefined} required className="w-auto" />
       </Field>
       <SubmitButton variant="secondary" pendingLabel="Saving…">

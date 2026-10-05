@@ -22,7 +22,7 @@ import { env } from "@/lib/env";
 import { formatIsoDateLong } from "@/lib/rules/calendar";
 import { evaluateCase } from "@/lib/rules/engine";
 import { randomToken, sha256 } from "@/lib/security/crypto";
-import { addEvent, propertyAddress, toFacts } from "./service";
+import { addEvent, isDemoOrg, propertyAddress, toFacts } from "./service";
 
 type Org = typeof organizations.$inferSelect;
 
@@ -40,7 +40,7 @@ export async function loadCase(db: DB, orgId: string, caseId: string) {
     .select()
     .from(caseDelays)
     .where(and(eq(caseDelays.orgId, orgId), eq(caseDelays.caseId, caseId)));
-  return { ...row, delays, evaluation: evaluateCase(toFacts(row.case, row.property, delays)) };
+  return { ...row, delays, evaluation: evaluateCase(toFacts(row.case, row.property, delays, { demo: await isDemoOrg(db, orgId) })) };
 }
 
 export async function storeDocument(

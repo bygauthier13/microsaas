@@ -95,11 +95,19 @@ export interface CaseFacts {
   /** England: does the hazard need supplementary preventative work? */
   supplementaryRequired?: boolean | null;
   repairCompletedAt?: Date | null;
-  /** Scotland private: landlord's own target for completion ("reasonable time"). */
+  /** Scotland private: landlord's own target for completion ("as soon as reasonably practicable"). */
   repairTargetDate?: string | null;
   delays?: DelayRecord[];
   closed?: boolean;
+  /**
+   * Demo workspaces only: evaluate as if the Scottish Regulations already apply, so sample
+   * cases created before commencement still show statutory clocks. Labelled in the UI.
+   */
+  assumeInForce?: boolean;
 }
+
+const DEMO_IN_FORCE_NOTE =
+  "Demo data: shown as if the 2026 Regulations already apply. Real reports you became aware of before 6 October 2026 are tracked as good practice.";
 
 export interface DutyResult {
   key: DutyKey;
@@ -329,10 +337,13 @@ function evaluateScotland(facts: CaseFacts, now: Date): CaseEvaluation {
     };
   }
 
-  const inForce = compareIso(awareIso, SCOTLAND_COMMENCEMENT) >= 0;
-  const scopeNote = inForce
+  const actuallyInForce = compareIso(awareIso, SCOTLAND_COMMENCEMENT) >= 0;
+  const inForce = actuallyInForce || Boolean(facts.assumeInForce);
+  const scopeNote = actuallyInForce
     ? undefined
-    : "Reported before 6 October 2026, so the statutory timescales do not apply. RepairClock still tracks the same timescales as good practice.";
+    : inForce
+      ? DEMO_IN_FORCE_NOTE
+      : "Reported before 6 October 2026, so the statutory timescales do not apply. RepairClock still tracks the same timescales as good practice.";
 
   const basisPrefix = social
     ? "Right to Repair Regs 2002 reg 8A (inserted by SSI 2026/173)"
@@ -448,7 +459,7 @@ function evaluateScotland(facts: CaseFacts, now: Date): CaseEvaluation {
     key: "complete_repair",
     label: social ? "Complete the repair" : "Complete the repair (as soon as reasonably practicable)",
     shortLabel: "Complete repair",
-    window: social ? "20 working days" : "Reasonable time",
+    window: social ? "20 working days" : "As soon as practicable",
     basis: social
       ? "Right to Repair Regs 2002 Schedule (substantial damp or mould: 20 working days)"
       : "Housing (Scotland) Act 2006 s13–14; Scottish Government guidance para 6.4",
@@ -472,7 +483,7 @@ function evaluateScotland(facts: CaseFacts, now: Date): CaseEvaluation {
       duties.push({ ...completeBase, dueKind: "none", status: "waiting", trigger: "Starts when repair work begins." });
     }
   } else {
-    // Private: "reasonable time". Track against the landlord's own target if set.
+    // Private: "as soon as reasonably practicable". Track against the landlord's own target if set.
     if (facts.repairCompletedAt) {
       duties.push({ ...completeBase, dueKind: "reasonable", status: "met" });
     } else if (facts.hazardFound && facts.repairCommencedAt) {
@@ -485,7 +496,7 @@ function evaluateScotland(facts: CaseFacts, now: Date): CaseEvaluation {
           status: st.status === "overdue" ? "overdue" : st.status,
           workingDaysLeft: st.workingDaysLeft,
           workingDaysLate: st.workingDaysLate,
-          note: "Your own target date — not a statutory deadline, but missing it weakens a 'reasonable time' argument at tribunal.",
+          note: "Your own target date — not a statutory deadline, but it is your evidence that the repair is being completed as soon as reasonably practicable.",
         });
       } else {
         duties.push({

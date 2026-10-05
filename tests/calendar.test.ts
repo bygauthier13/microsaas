@@ -92,6 +92,17 @@ describe("London time handling", () => {
   });
 
   it("formats dates for humans", () => {
-    expect(formatIsoDate("2026-10-20")).toBe("Tue, 20 Oct 2026");
+    expect(formatIsoDate("2026-10-20")).toBe("Tue 20 Oct 2026");
+  });
+});
+
+describe("deterministic formatting", () => {
+  it("formats long dates without locale-dependent punctuation", async () => {
+    const { formatIsoDateLong, formatInstant, fromLondonLocal } = await import("@/lib/rules/calendar");
+    expect(formatIsoDateLong("2026-10-20")).toBe("Tuesday 20 October 2026");
+    expect(formatIsoDateLong("2027-01-01")).toBe("Friday 1 January 2027");
+    // 14:05 BST on 20 Oct 2026 and 09:30 GMT on 7 Dec 2026, shown in UK time.
+    expect(formatInstant(fromLondonLocal("2026-10-20", "14:05"))).toBe("Tue 20 Oct 2026, 14:05");
+    expect(formatInstant(fromLondonLocal("2026-12-07", "09:30"))).toBe("Mon 7 Dec 2026, 09:30");
   });
 });
