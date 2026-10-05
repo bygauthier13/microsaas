@@ -32,7 +32,7 @@ function safeNext(next: unknown): string {
 export async function signupAction(_prev: FormState, formData: FormData): Promise<FormState> {
   const h = await headers();
   const ip = clientIp(h);
-  const limited = await rateLimit(`signup:${ip}`, 8, 3600);
+  const limited = await rateLimit(`signup:${ip}`, env.isProduction ? 8 : 200, 3600);
   if (!limited.ok) return { error: "Too many sign-ups from this network. Please try again later." };
 
   const parsed = z

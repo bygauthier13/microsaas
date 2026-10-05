@@ -49,7 +49,7 @@ export const env = {
     return str("ANTHROPIC_API_KEY");
   },
   get anthropicModel(): string {
-    return str("ANTHROPIC_MODEL") ?? "claude-sonnet-5-5";
+    return str("ANTHROPIC_MODEL") ?? "claude-opus-5-5";
   },
   // Analytics
   get posthogKey() {

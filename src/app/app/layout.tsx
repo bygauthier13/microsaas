@@ -4,6 +4,7 @@ import { LogOut } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { NavLinks } from "@/components/app/nav";
 import { MobileNav } from "@/components/app/mobile-nav";
+import { ToastProvider } from "@/components/toast";
 import { requireUser } from "@/lib/auth/session";
 import { logoutAction } from "@/lib/auth/actions";
 import { orgAccess } from "@/lib/billing/plans";
@@ -79,7 +80,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           </div>
         ) : null}
 
-        <main className="px-4 py-6 sm:px-8 sm:py-8 max-w-[1240px]">{children}</main>
+        <main className="px-4 py-6 sm:px-8 sm:py-8 max-w-[1240px]">
+          <ToastProvider>{children}</ToastProvider>
+        </main>
       </div>
     </div>
   );
