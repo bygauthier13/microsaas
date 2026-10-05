@@ -19,6 +19,7 @@ const CATEGORY: Record<string, string> = {
   welcome: "Welcome",
   password_reset: "Password reset",
   trial_ending: "Trial reminder",
+  team_invite: "Team invitation",
 };
 
 export default async function OutboxPage() {

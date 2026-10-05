@@ -74,6 +74,11 @@ export const env = {
   get cronSecret() {
     return str("CRON_SECRET");
   },
+  /** Sign-ups allowed per IP per hour (raise for load or end-to-end tests). */
+  get signupRateLimit(): number {
+    const n = Number(process.env.SIGNUP_RATE_LIMIT);
+    return Number.isFinite(n) && n > 0 ? n : this.isProduction ? 8 : 200;
+  },
   get demoEnabled(): boolean {
     return process.env.DEMO_ENABLED !== "false";
   },

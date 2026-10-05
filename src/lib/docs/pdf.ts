@@ -321,7 +321,11 @@ export async function renderEvidencePack(input: EvidencePackInput): Promise<Uint
       d.window,
       dueText(d),
       `${d.completedAt ? formatInstant(d.completedAt) : "—"} · ${STATUS_TEXT[d.status] ?? d.status}${
-        d.workingDaysLate ? ` (${d.workingDaysLate} working day${d.workingDaysLate === 1 ? "" : "s"} late)` : ""
+        d.status === "extended" && d.delay
+          ? ` to ${formatIsoDate(d.delay.revisedDate)}`
+          : d.workingDaysLate
+            ? ` (${d.workingDaysLate} working day${d.workingDaysLate === 1 ? "" : "s"} late)`
+            : ""
       }`,
     ];
     let minY = y0;

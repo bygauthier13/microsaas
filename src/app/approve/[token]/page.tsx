@@ -22,6 +22,10 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
+function hasExpired(at: Date): boolean {
+  return at.getTime() < Date.now();
+}
+
 function safeDecode(value: string): string {
   try {
     return decodeURIComponent(value);
@@ -70,7 +74,7 @@ export default async function ApprovePage({ params }: PageProps<"/approve/[token
   const { req, org, landlord } = row;
   const ev = loaded.evaluation;
   const next = ev.nextDuty;
-  const expired = req.expiresAt.getTime() < Date.now();
+  const expired = hasExpired(req.expiresAt);
   const scotland = loaded.property.jurisdiction === "scotland";
 
   return shell(

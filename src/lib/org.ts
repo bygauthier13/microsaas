@@ -1,6 +1,6 @@
-import { and, count, eq, isNull, sql } from "drizzle-orm";
+import { and, count, eq, gt, isNull, sql } from "drizzle-orm";
 import { getDb } from "@/lib/db";
-import { memberships, organizations, properties, type OrgKind, type OrgSettings } from "@/lib/db/schema";
+import { invitations, memberships, organizations, properties, type OrgKind, type OrgSettings } from "@/lib/db/schema";
 import { orgAccess, TRIAL_DAYS } from "@/lib/billing/plans";
 
 export async function createOrganization(input: {
@@ -57,4 +57,17 @@ export async function nextCaseReference(orgId: string, prefix: string): Promise<
     .where(eq(organizations.id, orgId))
     .returning({ n: organizations.caseCounter });
   return `${prefix}-${String(row.n).padStart(4, "0")}`;
+}
+
+/** Members plus live (unaccepted, unrevoked, unexpired) invitations. */
+export async function seatsInUse(orgId: string): Promise<number> {
+  const db = await getDb();
+  const [[m], [i]] = await Promise.all([
+    db.select({ n: count() }).from(memberships).where(eq(memberships.orgId, orgId)),
+    db
+      .select({ n: count() })
+      .from(invitations)
+      .where(and(eq(invitations.orgId, orgId), isNull(invitations.acceptedAt), isNull(invitations.revokedAt), gt(invitations.expiresAt, new Date()))),
+  ]);
+  return Number(m?.n ?? 0) + Number(i?.n ?? 0);
 }

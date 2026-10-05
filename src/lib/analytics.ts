@@ -30,6 +30,8 @@ export type EventName =
   | "subscription_canceled"
   | "payment_failed"
   | "demo_started"
+  | "member_invited"
+  | "member_joined"
   | "calculator_used"
   | "pricing_viewed";
 

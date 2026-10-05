@@ -220,3 +220,17 @@ export function trialEndingEmail(opts: { orgName: string; daysLeft: number }): R
     text: `Your RepairClock trial ends in ${opts.daysLeft} days. Choose a plan: ${url}`,
   };
 }
+
+export function teamInviteEmail(opts: { orgName: string; inviterName: string; url: string }): Rendered {
+  return {
+    subject: `${opts.inviterName} invited you to ${opts.orgName} on RepairClock`,
+    html: layout({
+      preheader: `Join ${opts.orgName}'s damp and mould case workspace.`,
+      heading: `Join ${opts.orgName} on RepairClock`,
+      body: `<p>${escapeHtml(opts.inviterName)} has invited you to ${escapeHtml(
+        opts.orgName,
+      )}'s RepairClock workspace, where your team tracks statutory damp, mould and repair deadlines.</p>${button(opts.url, "Accept invitation")}<p style="color:#6b6457;font-size:13px">The link works once and expires in 7 days. If you weren't expecting this, you can ignore it.</p>`,
+    }),
+    text: `${opts.inviterName} invited you to ${opts.orgName} on RepairClock. Accept: ${opts.url} (expires in 7 days)`,
+  };
+}

@@ -8,7 +8,6 @@ import { sql } from "drizzle-orm";
 async function main() {
   const db = await getDb();
   const res = await db.execute(sql`select count(*)::int as n from information_schema.tables where table_schema = 'public'`);
-  // eslint-disable-next-line no-console
   console.log(`Migrations applied (${databaseKind()}). Public tables:`, (res as unknown as { rows: Array<{ n: number }> }).rows?.[0]?.n ?? res);
   process.exit(0);
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Alert, Field, Input, Select, Textarea } from "@/components/ui";
 import { FormPendingContext, SubmitButton } from "@/components/submit-button";
 import { useFormAction } from "@/components/forms/use-form-action";
@@ -38,21 +38,20 @@ export function PropertyForm({
   const toast = useToast();
   const router = useRouter();
   const ref = useRef<HTMLFormElement>(null);
-  const { state, pending, onSubmit } = useFormAction<ActionState>(async (prev, fd) => {
-    const res = await savePropertyAction(prev, fd);
-    if (res.ok && res.message) toast(res.message);
-    return res;
-  }, {});
   // Editing keeps the saved link (or "none"); a new home must make an explicit choice.
   const [landlordChoice, setLandlordChoice] = useState(values.id ? (values.landlordId ?? "none") : landlords.length ? "" : "new");
-  useEffect(() => {
-    if (!state.ok) return;
-    if (values.id && onDoneHref) router.push(onDoneHref);
-    else {
-      ref.current?.reset();
-      setLandlordChoice(landlords.length ? "" : "new");
+  const { state, pending, onSubmit } = useFormAction<ActionState>(async (prev, fd) => {
+    const res = await savePropertyAction(prev, fd);
+    if (res.ok) {
+      if (res.message) toast(res.message);
+      if (values.id && onDoneHref) router.push(onDoneHref);
+      else {
+        ref.current?.reset();
+        setLandlordChoice(landlords.length ? "" : "new");
+      }
     }
-  }, [state, values.id, onDoneHref, router, landlords.length]);
+    return res;
+  }, {});
 
   return (
     <FormPendingContext.Provider value={pending}>

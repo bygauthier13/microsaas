@@ -116,6 +116,26 @@ export const memberships = pgTable(
   (t) => [primaryKey({ columns: [t.userId, t.orgId] }), index("memberships_org_idx").on(t.orgId)],
 );
 
+export const invitations = pgTable(
+  "invitations",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    orgId: uuid("org_id")
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    email: text("email").notNull(),
+    role: text("role").$type<"owner" | "member">().notNull().default("member"),
+    /** sha256 of the invite token — the raw token only exists in the emailed link. */
+    tokenHash: text("token_hash").notNull(),
+    invitedBy: uuid("invited_by").references(() => users.id, { onDelete: "set null" }),
+    expiresAt: ts("expires_at").notNull(),
+    acceptedAt: ts("accepted_at"),
+    revokedAt: ts("revoked_at"),
+    createdAt: ts("created_at").notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("invitations_token_unique").on(t.tokenHash), index("invitations_org_idx").on(t.orgId)],
+);
+
 export const landlords = pgTable(
   "landlords",
   {
