@@ -15,7 +15,7 @@ async function main() {
     console.error("Set STRIPE_SECRET_KEY (use a test key: sk_test_...) and run again.");
     process.exit(1);
   }
-  if (key.startsWith("sk_live_") && process.env.CONFIRM_LIVE !== "yes") {
+  if (/^(sk|rk)_live_/.test(key) && process.env.CONFIRM_LIVE !== "yes") {
     console.error("Refusing to run against a live key. Set CONFIRM_LIVE=yes if you really mean it.");
     process.exit(1);
   }

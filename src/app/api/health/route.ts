@@ -13,7 +13,7 @@ export async function GET() {
     website_address: env.appUrl,
     emails: env.resendApiKey ? `sending from ${env.emailFrom}` : "not set up yet: emails are only recorded in the app (add RESEND_API_KEY)",
     payments: env.stripeSecretKey
-      ? env.stripeSecretKey.startsWith("sk_live_")
+      ? /^(sk|rk)_live_/.test(env.stripeSecretKey)
         ? "Stripe LIVE mode: real cards are charged"
         : "Stripe test mode: use card 4242 4242 4242 4242"
       : "not set up yet (add STRIPE_SECRET_KEY)",
