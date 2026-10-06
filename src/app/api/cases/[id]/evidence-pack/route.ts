@@ -5,6 +5,7 @@ import { getCaseDetail, propertyAddress } from "@/lib/cases/service";
 import { getDb } from "@/lib/db";
 import { documents, landlords } from "@/lib/db/schema";
 import { renderEvidencePack } from "@/lib/docs/pdf";
+import { byteStream } from "@/lib/http";
 import { CAUSES, SOURCES, formatPence, optionLabel } from "@/lib/domain";
 import { formatInstant, formatIsoDate, londonDateOf } from "@/lib/rules/calendar";
 import { hazardLabel, type HazardKey } from "@/lib/rules/hazards";
@@ -144,7 +145,7 @@ export async function GET(_req: Request, { params }: RouteContext<"/api/cases/[i
 
   await track("evidence_pack_downloaded", { orgId: org.id, userId: auth.user.id, isDemo: org.isDemo });
   const filename = `RepairClock-evidence-${c.reference}-${londonDateOf(new Date())}.pdf`;
-  return new Response(new Uint8Array(pdf), {
+  return new Response(byteStream(new Uint8Array(pdf)), {
     headers: {
       "content-type": "application/pdf",
       "content-disposition": `attachment; filename="${filename}"`,

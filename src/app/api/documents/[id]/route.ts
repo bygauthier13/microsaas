@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { getAuth } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
 import { documents } from "@/lib/db/schema";
+import { byteStream } from "@/lib/http";
 
 export const dynamic = "force-dynamic";
 
@@ -21,10 +22,9 @@ export async function GET(_req: Request, { params }: RouteContext<"/api/document
   if (!doc) return Response.json({ error: "Not found" }, { status: 404 });
   const disposition = INLINE.has(doc.mime) ? "inline" : "attachment";
   const ascii = doc.filename.replace(/[^\x20-\x7e]/g, "_").replace(/"/g, "");
-  return new Response(new Uint8Array(doc.data), {
+  return new Response(byteStream(new Uint8Array(doc.data)), {
     headers: {
       "content-type": doc.mime,
-      "content-length": String(doc.data.length),
       "content-disposition": `${disposition}; filename="${ascii}"; filename*=UTF-8''${encodeURIComponent(doc.filename)}`,
       "cache-control": "private, no-store",
       "x-content-type-options": "nosniff",

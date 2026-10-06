@@ -51,6 +51,11 @@ async function init(): Promise<DB> {
     return db as unknown as DB;
   }
 
+  if (process.env.VERCEL) {
+    throw new Error(
+      "DATABASE_URL is not set. On Vercel the app needs a Postgres database: add one under Storage (Neon) or set DATABASE_URL in Settings → Environment Variables, then redeploy.",
+    );
+  }
   const [{ PGlite }, { drizzle }, { migrate }] = await Promise.all([
     import("@electric-sql/pglite"),
     import("drizzle-orm/pglite"),

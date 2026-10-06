@@ -12,7 +12,12 @@ function str(name: string): string | undefined {
 
 export const env = {
   get appUrl(): string {
-    return (str("APP_URL") ?? "http://localhost:3000").replace(/\/$/, "");
+    const explicit = str("APP_URL");
+    if (explicit) return explicit.replace(/\/$/, "");
+    // On Vercel, fall back to the project's production domain (a system env var).
+    const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+    if (vercel) return `https://${vercel.replace(/\/$/, "")}`;
+    return "http://localhost:3000";
   },
   get isProduction(): boolean {
     return process.env.NODE_ENV === "production";

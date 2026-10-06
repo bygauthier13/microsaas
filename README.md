@@ -87,13 +87,18 @@ npm run stripe:setup   # create Stripe products/prices/portal config (test key)
 To run the E2E suite against an already running server: `E2E_BASE_URL=http://localhost:3000 npm run test:e2e`.
 The embedded database is single-process: stop `next dev` before running a CLI script against it (a lock file makes a second process fail fast with a clear message), or call the HTTP endpoint (e.g. `GET /api/cron/daily`) instead.
 
-## Deployment (Vercel + Neon, ~20 minutes)
+## Deployment (Vercel + Neon)
 
-1. **Database**: create a Postgres database (Neon/Supabase, EU or UK region) and set `DATABASE_URL`. Migrations run automatically on first request (`DB_AUTO_MIGRATE=true`), or run `npm run db:migrate` with the env var set.
-2. **Vercel**: import the repo, set the env vars above (`APP_URL=https://your-domain`), deploy. `vercel.json` schedules `/api/cron/daily` at 06:00 UTC daily; set `CRON_SECRET` (Vercel sends it as a Bearer token).
-3. **Email**: verify your sending domain in Resend; set `RESEND_API_KEY` and `EMAIL_FROM`.
-4. **Stripe** (below), then set `COMPANY_*` legal details.
-5. Check `GET /api/health` — it reports database, email, billing and AI modes (no secrets).
+1. **Vercel**: sign in with GitHub → *Add New → Project* → import this repo (Next.js is detected; no build settings to change).
+2. **Database**: in the Vercel project → *Storage* → create a **Neon** Postgres database (London region) and connect it to the project — this adds `DATABASE_URL`. Migrations run automatically on the first request; open `/api/health` once after the first deploy.
+3. **Environment variables** (*Settings → Environment Variables*): `CRON_SECRET` (any long random string), `COMPANY_NAME`, `COMPANY_NUMBER`, `COMPANY_ADDRESS`, `SUPPORT_EMAIL`, then the Stripe and Resend keys below. `APP_URL` is optional on Vercel (it defaults to the project's production domain); set it once you add a custom domain. Redeploy after changing variables.
+4. **Email**: add your domain in Resend, add the DNS records it shows, then set `RESEND_API_KEY` and `EMAIL_FROM` (an address on that domain).
+5. **Stripe** (below).
+6. Open `/api/health`: it lists, in plain words, what is set up and what is missing (never secret values).
+
+`vercel.json` schedules `/api/cron/daily` once a day (allowed on the free plan); Vercel sends `CRON_SECRET` as a Bearer token. The free Hobby plan is for non-commercial use — upgrade the project to Pro before taking payments.
+
+Hosting limits handled in code: request bodies over 4.5 MB are rejected by Vercel, so photos are resized in the browser before upload (≤ 4 MB per upload); file downloads and evidence packs are streamed, so they aren't subject to the 4.5 MB response cap. The embedded database is refused on Vercel with a clear error if `DATABASE_URL` is missing.
 
 Any Node host works too (`npm run build && npm start`); schedule `npm run cron:daily` (or `curl -H "Authorization: Bearer $CRON_SECRET" https://your-domain/api/cron/daily`) once a day.
 
@@ -116,10 +121,12 @@ Roughly **£20 to start and ~£20–£40/month once you charge customers**, cove
 
 ## Stripe setup (test mode)
 
-1. `STRIPE_SECRET_KEY=sk_test_... npm run stripe:setup` — creates one product per plan with monthly and annual GBP prices (tax-exclusive) and a Customer Portal configuration, and prints the `STRIPE_PRICE_*` / `STRIPE_PORTAL_CONFIGURATION_ID` lines. Safe to re-run.
-2. Webhook: in the Stripe dashboard add an endpoint `https://your-domain/api/stripe/webhook` with events `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid`, `invoice.payment_failed`, and set `STRIPE_WEBHOOK_SECRET`. Locally: `stripe listen --forward-to localhost:3000/api/stripe/webhook`.
-3. Test card `4242 4242 4242 4242`. The success page also syncs the subscription directly from the Checkout Session, so plans show as active even before the webhook arrives.
-4. Going live: swap to live keys and re-run the setup script with `CONFIRM_LIVE=yes`.
+1. Create a Stripe account; stay in **test mode**. Copy the secret key (`sk_test_...`) into `STRIPE_SECRET_KEY`. That's enough for checkout: without `STRIPE_PRICE_*` variables, prices are defined inline from the plan table (GBP, VAT-exclusive). `npm run stripe:setup` remains available if you prefer pre-created products, prices and a portal configuration.
+2. Customer portal: in the Stripe dashboard → *Settings → Billing → Customer portal*, save the default configuration (allow cancellation, payment method updates and invoices). Without it the "Manage billing" button can't open the portal.
+3. Webhook: *Developers → Webhooks* → add an endpoint `https://your-domain/api/stripe/webhook` with events `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid`, `invoice.payment_failed`; copy its signing secret into `STRIPE_WEBHOOK_SECRET`. Locally: `stripe listen --forward-to localhost:3000/api/stripe/webhook`.
+4. Test card `4242 4242 4242 4242`, any future date, any CVC. The success page also syncs the subscription straight from the Checkout Session, so plans show as active even before the webhook arrives.
+5. Founding discount: *Product catalog → Coupons* → 20% off, repeating for 12 months, with promotion code `FOUNDING20`. Checkout already accepts promotion codes.
+6. Going live: activate the Stripe account (identity and bank details), then repeat steps 1–5 with live keys.
 
 Plans (GBP, excl. VAT; annual = 10× monthly): Landlord £12 (10 homes, 1 seat) · Agent £99 (300 homes, 5 seats) · Agency £249 (1,500 homes, 15 seats) · Housing £499 (5,000 homes, 50 seats). 14-day free trial (300 homes, no card).
 

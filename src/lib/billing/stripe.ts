@@ -13,7 +13,7 @@ import { track } from "@/lib/analytics";
 import { getDb } from "@/lib/db";
 import { organizations, type PlanId, type SubscriptionStatus } from "@/lib/db/schema";
 import { env } from "@/lib/env";
-import { isPaidPlan, type PaidPlanId } from "./plans";
+import { PLANS, isPaidPlan, type PaidPlanId } from "./plans";
 
 type Org = typeof organizations.$inferSelect;
 
@@ -43,15 +43,27 @@ async function ensureCustomer(org: Org, email: string): Promise<string> {
 
 export async function createCheckoutUrl(org: Org, email: string, plan: PaidPlanId, interval: "month" | "year"): Promise<string> {
   const price = priceIdFor(plan, interval);
-  if (!price) {
-    throw new Error(`No Stripe price configured for ${plan}/${interval}. Run "npm run stripe:setup" and set the STRIPE_PRICE_* variables.`);
-  }
+  const p = PLANS[plan];
+  // Pre-created prices (npm run stripe:setup) are used when configured; otherwise the price is
+  // defined inline from the plan table, so a fresh Stripe account works with just a secret key.
+  const lineItem = price
+    ? { price, quantity: 1 }
+    : {
+        quantity: 1,
+        price_data: {
+          currency: "gbp",
+          unit_amount: Math.round((interval === "year" ? p.annual : p.monthly) * 100),
+          recurring: { interval },
+          tax_behavior: "exclusive" as const,
+          product_data: { name: `RepairClock ${p.name}`, description: p.audience, metadata: { plan } },
+        },
+      };
   const customer = await ensureCustomer(org, email);
   const session = await stripe().checkout.sessions.create({
     mode: "subscription",
     customer,
     client_reference_id: org.id,
-    line_items: [{ price, quantity: 1 }],
+    line_items: [lineItem],
     allow_promotion_codes: true,
     billing_address_collection: "required",
     tax_id_collection: { enabled: true },

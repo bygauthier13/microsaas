@@ -19,6 +19,7 @@ import {
 import { uploadDocumentsAction } from "@/lib/actions/documents";
 import { DELAY_REASONS } from "@/lib/domain";
 import { ActionForm } from "./action-form";
+import { PhotoInput } from "./photo-input";
 
 interface Base {
   caseId: string;
@@ -258,16 +259,8 @@ export function UploadForm({ caseId }: { caseId: string }) {
             <option value="other">Other</option>
           </Select>
         </Field>
-        <Field label="Files" htmlFor="files" hint="JPG, PNG, WebP, HEIC or PDF · up to 8 files, 8 MB each. Each file is fingerprinted (SHA-256) for the evidence pack.">
-          <input
-            id="files"
-            name="files"
-            type="file"
-            multiple
-            required
-            accept="image/jpeg,image/png,image/webp,image/heic,application/pdf"
-            className="block w-full text-sm file:mr-3 file:h-9 file:rounded-lg file:border file:border-line-strong file:bg-surface file:px-3 file:text-sm file:font-medium hover:file:bg-paper"
-          />
+        <Field label="Files" htmlFor="files" hint="JPG, PNG, WebP or PDF, up to 8 files. Photos are resized automatically; up to 4 MB per upload. Each file is fingerprinted (SHA-256) for the evidence pack.">
+          <PhotoInput id="files" name="files" accept="image/jpeg,image/png,image/webp,application/pdf" />
         </Field>
       </div>
       <SubmitButton variant="secondary" pendingLabel="Uploading…">
