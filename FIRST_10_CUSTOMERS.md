@@ -6,6 +6,7 @@ Goal: **10 paying Scottish letting agencies** without booking a single call. Peo
 
 1. **Cold email** (you) — short, plain text, one link. It explains the new law and their real deadline date.
 2. **Demo workspace** (automatic) — `/demo` opens a sample agency with no sign-up. A "Try it in 2 minutes" panel walks them through four things: a missed deadline, a tenant letter issued in one click, a landlord approval, a delay notice and its evidence pack.
+   **Videos** (automatic) — the homepage plays a 90-second overview (repairclock.bygauthier.com/#video), and repairclock.bygauthier.com/guide shows the 2-minute setup guide step by step. The demo, the Today page of a new workspace and the welcome email all link to the guide.
 3. **Free trial** (automatic) — 14 days, no card. Two quick questions, then they log a real report and see their deadlines.
 4. **Nudges** (automatic) — if no report is logged after a day, they get "log your first report"; after 3 days with few homes, "import your homes from a CSV". Every weekday they get the deadline digest. Three days before the trial ends, they get a reminder.
 5. **Payment** (automatic) — they choose a plan and pay by card through Stripe. The founding discount code goes in your emails.
@@ -122,8 +123,9 @@ After email 4, stop. You can contact non-responders once more in a month with ge
 | "It's the landlord's duty, not ours." | "It is, and the approval link shows the landlord exactly that. But the tenant told you, so the record of what you did and when protects you too." |
 | "Can you set it up for us?" | "Yes. Email me your property list as a CSV (address, postcode, tenant, landlord name and email) and I'll import it today." |
 | "Is it legal advice?" | "No. It runs the process set out in the Regulations and the Scottish Government's guidance, with the sources linked. You decide what goes in every letter." |
-| "Can we have a call?" | "Of course, though most agents find the demo explains it in two minutes: [demo link]. If you still have questions after that, reply here and I'll answer them." (Offer a call only if they insist.) |
-| "Send more info." | Link the demo and the Scotland guide (repairclock.bygauthier.com/scotland). |
+| "Can we have a call?" | "Of course, though most agents find the 90-second video and the demo explain it: repairclock.bygauthier.com/#video and [demo link]. If you still have questions after that, reply here and I'll answer them." (Offer a call only if they insist.) |
+| "Send more info." | Link the 90-second video (repairclock.bygauthier.com/#video), the demo and the Scotland guide (repairclock.bygauthier.com/scotland). |
+| "How do we get started?" | "This 2-minute video shows every step, from importing your homes to choosing a plan: repairclock.bygauthier.com/guide" |
 | "No thanks" / "Remove me" | "Done, sorry to bother you." Add them to the do-not-contact list the same day. |
 
 ## 6. Each day

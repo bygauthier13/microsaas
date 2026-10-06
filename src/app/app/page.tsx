@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { and, count, eq, isNull } from "drizzle-orm";
-import { CheckCircle2, Circle, FolderClock, Plus, Upload } from "lucide-react";
+import { CheckCircle2, Circle, FolderClock, PlayCircle, Plus, Upload } from "lucide-react";
 import { DemoTour } from "@/components/app/demo-tour";
 import { CaseListHeader, CaseRow, sortByUrgency } from "@/components/case/case-row";
 import { Alert, Card, EmptyState, LinkButton, PageHeader, Stat } from "@/components/ui";
+import { GuideVideoButton } from "@/components/video";
 import { requireOrg } from "@/lib/auth/session";
 import { listCases } from "@/lib/cases/service";
 import { getDb } from "@/lib/db";
@@ -162,6 +163,9 @@ export default async function DashboardPage() {
                   </li>
                 ))}
               </ol>
+              <GuideVideoButton className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-signal-strong underline-offset-2 hover:underline">
+                <PlayCircle className="h-4 w-4" aria-hidden /> Watch the 2-minute setup guide
+              </GuideVideoButton>
             </Card>
           ) : null}
           <Card className="p-4 sm:p-5">

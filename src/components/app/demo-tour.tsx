@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+import { GuideVideoButton } from "@/components/video";
 import type { CaseListItem } from "@/lib/cases/service";
 
 /**
@@ -64,13 +65,15 @@ export function DemoTour({ items }: { items: CaseListItem[] }) {
           </li>
         ))}
       </ol>
-      <p className="mt-4 text-sm text-ink-2">
+      {/* A div, not a p: the guide's pop-up can't sit inside a paragraph. */}
+      <div className="mt-4 text-sm text-ink-2">
         Seen enough?{" "}
         <Link href="/signup?from=demo" className="font-semibold text-signal-strong underline underline-offset-2">
           Start your own free trial
         </Link>{" "}
-        — 14 days, no card. Import your homes from a spreadsheet and log your next real report.
-      </p>
+        — 14 days, no card. Import your homes from a spreadsheet and log your next real report.{" "}
+        <GuideVideoButton className="font-semibold text-ink underline underline-offset-2">Watch the 2-minute setup guide</GuideVideoButton> to see every step.
+      </div>
     </section>
   );
 }

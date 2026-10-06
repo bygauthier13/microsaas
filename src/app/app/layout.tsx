@@ -5,6 +5,7 @@ import { Logo } from "@/components/logo";
 import { NavLinks } from "@/components/app/nav";
 import { MobileNav } from "@/components/app/mobile-nav";
 import { ToastProvider } from "@/components/toast";
+import { GuideVideoButton } from "@/components/video";
 import { requireUser } from "@/lib/auth/session";
 import { logoutAction } from "@/lib/auth/actions";
 import { orgAccess } from "@/lib/billing/plans";
@@ -67,6 +68,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <div className="border-b border-info/20 bg-info-soft px-4 py-2.5 text-sm text-info sm:px-8">
             <span className="font-semibold">Demo workspace.</span> Sample agency, homes and cases — nothing here is real, emails go to the in-app outbox, and it resets after 24 hours.{" "}
             <Link href="/signup?from=demo" className="font-semibold underline underline-offset-2">Create your own workspace</Link>
+            {" · "}
+            <GuideVideoButton className="font-semibold underline underline-offset-2">▶ Watch the 2-minute setup guide</GuideVideoButton>
           </div>
         ) : null}
         {access?.state === "trial_expired" ? (

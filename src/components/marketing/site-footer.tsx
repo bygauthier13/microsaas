@@ -18,6 +18,7 @@ export function SiteFooter() {
           <p className="text-sm font-semibold">Product</p>
           <ul className="mt-3 space-y-2 text-sm text-ink-2">
             <li><Link href="/#how-it-works" className="hover:underline">How it works</Link></li>
+            <li><Link href="/guide" className="hover:underline">Setup guide (video)</Link></li>
             <li><Link href="/pricing" className="hover:underline">Pricing</Link></li>
             <li><Link href="/demo" className="hover:underline">Live demo</Link></li>
             <li><Link href="/signup" className="hover:underline">Start free trial</Link></li>

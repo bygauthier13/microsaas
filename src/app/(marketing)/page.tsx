@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -9,16 +10,19 @@ import {
   Inbox,
   MailCheck,
   Minus,
+  PlayCircle,
   Timer,
   UserCheck,
   X,
 } from "lucide-react";
 import { ClockStrip } from "@/components/duty";
 import { buttonClass } from "@/components/ui";
+import { GuideVideoButton, PlayBadge, Video } from "@/components/video";
 import { PLANS, PLAN_ORDER, formatGbp } from "@/lib/billing/plans";
 import { addCalendarDays, compareIso, formatIsoDate, fromLondonLocal, isWorkingDay, londonDateOf } from "@/lib/rules/calendar";
 import { evaluateCase, previewScotlandTimeline } from "@/lib/rules/engine";
 import { SCOTLAND_COMMENCEMENT } from "@/lib/rules/hazards";
+import { VIDEOS } from "@/lib/videos";
 
 // Dates on this page are computed from "today" — refresh hourly.
 export const revalidate = 3600;
@@ -121,6 +125,9 @@ export default function LandingPage() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-muted">No card needed · import your homes from a spreadsheet · set up in 10 minutes</p>
+            <a href="#video" className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-ink underline-offset-2 hover:underline">
+              <PlayCircle className="h-4 w-4 text-signal-strong" aria-hidden /> Watch the 90-second video
+            </a>
           </div>
 
           <div className="relative">
@@ -141,6 +148,40 @@ export default function LandingPage() {
                 </Link>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Videos: what it does, then how to set it up */}
+      <section id="video" className="scroll-mt-20 border-t border-line">
+        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1.9fr)_minmax(0,1fr)] lg:items-end lg:py-16">
+          <div className="min-w-0">
+            <p className="eyebrow">See it in action</p>
+            <h2 className="display mt-3 text-3xl leading-tight sm:text-4xl">{VIDEOS.overview.title}</h2>
+            <Video className="mt-6" src={VIDEOS.overview.src} poster={VIDEOS.overview.poster} title={VIDEOS.overview.title} label="Play the 90-second overview" />
+          </div>
+          <div className="card flex flex-col p-5 sm:p-6">
+            <p className="eyebrow">Ready to set up?</p>
+            <h3 className="mt-2 text-xl font-semibold">The step-by-step guide</h3>
+            <p className="mt-1 text-sm text-muted">2 minutes · 8 steps, from sign-up to choosing a plan</p>
+            <GuideVideoButton className="group relative mt-4 block overflow-hidden rounded-xl border border-line">
+              <Image src={VIDEOS.guide.poster} alt="" width={1280} height={720} className="aspect-video w-full object-cover" />
+              <span className="absolute inset-0 flex items-center justify-center bg-ink/5">
+                <PlayBadge size="md" />
+              </span>
+              <span className="sr-only">Play the setup guide</span>
+            </GuideVideoButton>
+            <ul className="mt-4 space-y-1.5 text-sm text-ink-2">
+              {["Import your homes from a spreadsheet", "Log a report and see every deadline", "Invite your team and choose a plan"].map((t) => (
+                <li key={t} className="flex gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-ok" aria-hidden />
+                  {t}
+                </li>
+              ))}
+            </ul>
+            <Link href="/guide" className="mt-5 text-sm font-medium text-signal-strong underline-offset-2 hover:underline">
+              See all 8 steps →
+            </Link>
           </div>
         </div>
       </section>
