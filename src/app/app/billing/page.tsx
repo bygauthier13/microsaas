@@ -23,7 +23,7 @@ const ERRORS: Record<string, string> = {
   checkout: "We couldn't start checkout. Please try again, or contact support.",
   portal: "We couldn't open the billing portal. Please try again.",
   portal_simulated: "The billing portal needs Stripe. In simulated mode, use the cancel button below.",
-  not_configured: "Payments aren't configured on this server yet.",
+  not_configured: "Card payments aren't switched on yet, so nothing was charged and your plan hasn't changed.",
 };
 
 export default async function BillingPage({ searchParams }: PageProps<"/app/billing">) {
@@ -65,10 +65,15 @@ export default async function BillingPage({ searchParams }: PageProps<"/app/bill
       {sp.checkout === "cancelled" ? <Alert tone="neutral">Checkout cancelled — nothing was charged.</Alert> : null}
       {sp.canceled === "1" ? <Alert tone="neutral">Your plan will end at the end of the current billing period. You can resume any time before then.</Alert> : null}
       {sp.resumed === "1" ? <Alert tone="ok">Your plan will continue to renew.</Alert> : null}
-      {simulated ? (
+      {simulated && env.allowSimulatedBilling ? (
         <Alert tone="info" title="Simulated billing mode">
           Stripe isn&apos;t configured on this server (no STRIPE_SECRET_KEY), so choosing a plan activates it instantly without payment. Set the Stripe keys to take real
           (test-mode) payments.
+        </Alert>
+      ) : null}
+      {simulated && !env.allowSimulatedBilling ? (
+        <Alert tone="neutral" title="Card payments open soon">
+          Plans can&apos;t be bought here just yet. Your free trial carries on as normal in the meantime.
         </Alert>
       ) : null}
 
@@ -187,7 +192,7 @@ export default async function BillingPage({ searchParams }: PageProps<"/app/bill
       </div>
       <p className="text-xs text-muted leading-relaxed">
         Payments are handled by Stripe; we never see your card details. Switching plans mid-period is prorated by Stripe. Need more than 5,000 homes, invoicing or a
-        DPA? <a href="mailto:hello@repairclock.co.uk" className="underline">Talk to us</a>.
+        DPA? <a href={`mailto:${env.company.email}`} className="underline">Talk to us</a>.
       </p>
     </div>
   );

@@ -31,6 +31,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // The client-side error page shows the support address too; inline it at build time.
+  env: { NEXT_PUBLIC_SUPPORT_EMAIL: process.env.SUPPORT_EMAIL ?? "" },
   serverExternalPackages: ["@electric-sql/pglite", "pg"],
   experimental: {
     // Allow CSV imports and photo uploads through Server Actions.

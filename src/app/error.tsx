@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { buttonClass } from "@/components/ui";
 
+const SUPPORT_EMAIL = process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "hello@repairclock.co.uk";
+
 export default function ErrorPage({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
     console.error(error);
@@ -12,7 +14,7 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
       <h1 className="display text-3xl">Something went wrong</h1>
       <p className="mt-3 max-w-md text-ink-2">
         Nothing you saved has been lost — every action is recorded as it happens. Try again, and if it keeps happening email{" "}
-        <a href="mailto:support@repairclock.co.uk" className="underline">support@repairclock.co.uk</a>
+        <a href={`mailto:${SUPPORT_EMAIL}`} className="underline">{SUPPORT_EMAIL}</a>
         {error.digest ? ` quoting reference ${error.digest}` : ""}.
       </p>
       <button type="button" onClick={reset} className={buttonClass("primary", "md", "mt-6")}>

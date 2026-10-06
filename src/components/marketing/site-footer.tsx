@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LogoMark } from "@/components/logo";
+import { env } from "@/lib/env";
 
 export function SiteFooter() {
   return (
@@ -33,7 +34,7 @@ export function SiteFooter() {
         <div>
           <p className="text-sm font-semibold">Company</p>
           <ul className="mt-3 space-y-2 text-sm text-ink-2">
-            <li><a href="mailto:hello@repairclock.co.uk" className="hover:underline">hello@repairclock.co.uk</a></li>
+            <li><a href={`mailto:${env.company.email}`} className="hover:underline">{env.company.email}</a></li>
             <li><Link href="/legal/privacy" className="hover:underline">Privacy notice</Link></li>
             <li><Link href="/legal/terms" className="hover:underline">Terms</Link></li>
           </ul>

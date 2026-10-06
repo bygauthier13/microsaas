@@ -12,6 +12,7 @@ import { invitations, memberships, users } from "@/lib/db/schema";
 import { formatInstant } from "@/lib/rules/calendar";
 import { defaultSignpost } from "@/lib/docs/letters";
 import { ORG_KINDS, optionLabel } from "@/lib/domain";
+import { env } from "@/lib/env";
 
 export const metadata = { title: "Settings" };
 
@@ -203,7 +204,7 @@ export default async function SettingsPage() {
               Export all cases (CSV)
             </a>
             <p className="mt-4 text-xs text-muted leading-relaxed">
-              To close your workspace and delete its data, email <a className="underline" href="mailto:support@repairclock.co.uk">support@repairclock.co.uk</a> from the
+              To close your workspace and delete its data, email <a className="underline" href={`mailto:${env.company.email}`}>{env.company.email}</a> from the
               owner&apos;s address. We delete within 30 days, except records we must keep by law (e.g. invoices).
             </p>
           </Card>

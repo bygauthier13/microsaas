@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import { Beacon } from "@/components/marketing/beacon";
 import { buttonClass } from "@/components/ui";
 import { PLANS, PLAN_ORDER, TRIAL_DAYS, formatGbp } from "@/lib/billing/plans";
+import { env } from "@/lib/env";
 
 export const metadata = {
   title: "Pricing — from £12/month",
@@ -17,7 +18,7 @@ const FAQ = [
   ["Do prices include VAT?", "Prices exclude VAT, which is added at checkout where applicable. You can add your VAT number in checkout."],
   ["Can I change plan or cancel?", "Yes — upgrade, downgrade or cancel from the billing page at any time. Changes are prorated; cancellation takes effect at the end of the period you've paid for."],
   ["Is there a discount for annual billing?", "Annual plans cost 10× the monthly price — two months free."],
-  ["We manage more than 5,000 homes, or need invoicing.", "Email hello@repairclock.co.uk and we'll set you up with invoicing, a DPA and onboarding."],
+  ["We manage more than 5,000 homes, or need invoicing.", `Email ${env.company.email} and we'll set you up with invoicing, a DPA and onboarding.`],
 ];
 
 export default function PricingPage() {

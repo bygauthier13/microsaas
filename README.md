@@ -90,13 +90,15 @@ The embedded database is single-process: stop `next dev` before running a CLI sc
 ## Deployment (Vercel + Neon)
 
 1. **Vercel**: sign in with GitHub → *Add New → Project* → import this repo (Next.js is detected; no build settings to change).
-2. **Database**: in the Vercel project → *Storage* → create a **Neon** Postgres database (London region) and connect it to the project — this adds `DATABASE_URL`. Migrations run automatically on the first request; open `/api/health` once after the first deploy.
-3. **Environment variables** (*Settings → Environment Variables*): `CRON_SECRET` (any long random string), `COMPANY_NAME`, `COMPANY_NUMBER`, `COMPANY_ADDRESS`, `SUPPORT_EMAIL`, then the Stripe and Resend keys below. `APP_URL` is optional on Vercel (it defaults to the project's production domain); set it once you add a custom domain. Redeploy after changing variables.
+2. **Database**: in the Vercel project → *Storage* → create a **Neon** Postgres database (London, `aws-eu-west-2`) and connect it to the project — this adds `DATABASE_URL`. `vercel.json` pins the functions to London (`lhr1`) so they sit next to the database. Migrations run automatically on the first request; open `/api/health` once after the first deploy.
+3. **Environment variables** (*Settings → Environment Variables*): `CRON_SECRET` (any long random string), `COMPANY_NAME`, `COMPANY_NUMBER` (limited companies only), `COMPANY_ADDRESS`, `SUPPORT_EMAIL` (shown on every page and used as the reply-to address, so it must be an inbox you read), then the Stripe and Resend keys below. `APP_URL` is optional on Vercel (it defaults to the project's production domain); set it once you add a custom domain. Redeploy after changing variables.
 4. **Email**: add your domain in Resend, add the DNS records it shows, then set `RESEND_API_KEY` and `EMAIL_FROM` (an address on that domain).
 5. **Stripe** (below).
 6. Open `/api/health`: it lists, in plain words, what is set up and what is missing (never secret values).
 
 `vercel.json` schedules `/api/cron/daily` once a day (allowed on the free plan); Vercel sends `CRON_SECRET` as a Bearer token. The free Hobby plan is for non-commercial use — upgrade the project to Pro before taking payments.
+
+Until `STRIPE_SECRET_KEY` is set, a production deployment refuses plan purchases and the billing page says card payments open soon (trials carry on). Simulated billing is for local development, or staging with `ALLOW_SIMULATED_BILLING=true`.
 
 Hosting limits handled in code: request bodies over 4.5 MB are rejected by Vercel, so photos are resized in the browser before upload (≤ 4 MB per upload); file downloads and evidence packs are streamed, so they aren't subject to the 4.5 MB response cap. The embedded database is refused on Vercel with a clear error if `DATABASE_URL` is missing.
 
