@@ -1,4 +1,5 @@
-"""Splits each step's voice clip into its sentences (one caption each) and writes audio/lines.json.
+"""Splits each voice clip into its sentences (one caption each) and writes audio/lines.json:
+python3 lines.py WORK [SCRIPT.json], where the script defaults to tutorial.json.
 
 With audio/<id>.mp3 present, each sentence break is the pause ffmpeg finds nearest to where the text
 says it should be. Without the audio (to preview the visuals), times are estimated from the clip
@@ -9,7 +10,7 @@ import json, os, re, subprocess, sys
 
 base = sys.argv[1]
 here = os.path.dirname(os.path.abspath(__file__))
-steps = json.load(open(f"{here}/tutorial.json"))
+steps = json.load(open(sys.argv[2] if len(sys.argv) > 2 else f"{here}/tutorial.json"))
 voice = json.load(open(f"{base}/voice.json")) if os.path.exists(f"{base}/voice.json") else {}
 
 

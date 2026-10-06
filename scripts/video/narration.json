@@ -1,9 +1,34 @@
 [
-  {"id": "s1", "captions": ["Since the sixth of October, every damp or mould report in a Scottish rented home comes with legal deadlines.", "RepairClock keeps track of them for you, from the tenant's first message to the finished repair."]},
-  {"id": "s2", "captions": ["When a tenant reports damp, you log it in about thirty seconds.", "RepairClock counts the working days for you, skipping weekends and Scottish bank holidays.", "Ten to investigate, three more to send the tenant a written summary, then five to start the repairs."]},
-  {"id": "s3", "captions": ["Every report sits on one dashboard, sorted by deadline.", "Anything overdue or due soon is flagged, and your team gets a short morning email listing what's due."]},
-  {"id": "s4", "captions": ["Need the landlord to approve the cost? Send them a link.", "They see the work, the price and the legal deadline, and approve with one tap, without logging in.", "Their answer is saved on the case, and RepairClock chases them if they don't reply."]},
-  {"id": "s5", "captions": ["After the investigation, RepairClock drafts the tenant's written summary.", "Check it, then email it in one click, in your agency's name.", "If a repair is delayed, it writes the delay notice too."]},
-  {"id": "s6", "captions": ["Every step is timestamped.", "Download the evidence pack: one PDF with the full timeline, the letters and the photos, ready for a tribunal."]},
-  {"id": "s7", "captions": ["See it for yourself with our sample agency, no sign-up needed.", "Or start a free fourteen-day trial, no card required.", "RepairClock. Damp and mould deadlines, handled."]}
+  {"id": "s1", "lines": [
+    {"say": "[cheerfully] Since the sixth of October, every damp or mould report in a Scottish rented home comes with legal deadlines.", "cap": "Since 6 October, every damp or mould report in a Scottish rented home comes with legal deadlines."},
+    {"say": "RepairClock keeps track of them for you, from the tenant's first message to the finished repair.", "cap": "RepairClock keeps track of them for you, from the tenant’s first message to the finished repair."}
+  ]},
+  {"id": "s2", "lines": [
+    {"say": "[cheerfully] When a tenant reports damp, you log it in about thirty seconds.", "cap": "When a tenant reports damp, you log it in about 30 seconds."},
+    {"say": "RepairClock counts the working days for you, skipping weekends and Scottish bank holidays.", "cap": "RepairClock counts the working days for you, skipping weekends and Scottish bank holidays."},
+    {"say": "Ten to investigate, three more to send the tenant a written summary, then five to start the repairs.", "cap": "10 to investigate, 3 more to send the tenant a written summary, then 5 to start the repairs."}
+  ]},
+  {"id": "s3", "lines": [
+    {"say": "[cheerfully] Every report sits on one dashboard, sorted by deadline.", "cap": "Every report sits on one dashboard, sorted by deadline."},
+    {"say": "Anything overdue or due soon is flagged, and your team gets a short morning email listing what's due.", "cap": "Anything overdue or due soon is flagged, and your team gets a short morning email listing what’s due."}
+  ]},
+  {"id": "s4", "lines": [
+    {"say": "[cheerfully] Need the landlord to approve the cost? Send them a link.", "cap": "Need the landlord to approve the cost? Send them a link."},
+    {"say": "They see the work, the price and the legal deadline, and approve with one tap, without logging in.", "cap": "They see the work, the price and the legal deadline, and approve with one tap, without logging in."},
+    {"say": "Their answer is saved on the case, and RepairClock chases them if they don't reply.", "cap": "Their answer is saved on the case, and RepairClock chases them if they don’t reply."}
+  ]},
+  {"id": "s5", "lines": [
+    {"say": "[cheerfully] After the investigation, RepairClock drafts the tenant's written summary.", "cap": "After the investigation, RepairClock drafts the tenant’s written summary."},
+    {"say": "Check it, then email it in one click, in your agency's name.", "cap": "Check it, then email it in one click, in your agency’s name."},
+    {"say": "If a repair is delayed, it writes the delay notice too.", "cap": "If a repair is delayed, it writes the delay notice too."}
+  ]},
+  {"id": "s6", "lines": [
+    {"say": "[cheerfully] Every step is timestamped.", "cap": "Every step is timestamped."},
+    {"say": "Download the evidence pack: one PDF with the full timeline, the letters and the photos, ready for a tribunal.", "cap": "Download the evidence pack: one PDF with the full timeline, the letters and the photos, ready for a tribunal."}
+  ]},
+  {"id": "s7", "lines": [
+    {"say": "[cheerfully] See it for yourself with our sample agency, no sign-up needed.", "cap": "See it for yourself with our sample agency, no sign-up needed."},
+    {"say": "Or start a free fourteen-day trial, no card required.", "cap": "Or start a free 14-day trial, no card required."},
+    {"say": "RepairClock. Damp and mould deadlines, handled.", "cap": "RepairClock. Damp & mould deadlines, handled."}
+  ]}
 ]
