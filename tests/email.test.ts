@@ -69,3 +69,13 @@ describe("agency sender name and copy", () => {
     expect(sent[1].bcc).toBeUndefined();
   });
 });
+
+describe("welcome email", () => {
+  it("links to the setup guide", async () => {
+    process.env.APP_URL = "https://repairclock.example.com";
+    const { welcomeEmail } = await import("@/lib/email/templates");
+    const mail = welcomeEmail({ name: "Fiona", orgName: "Lothian & Forth Lettings" });
+    expect(mail.html).toContain('href="https://repairclock.example.com/guide"');
+    expect(mail.text).toContain("https://repairclock.example.com/guide");
+  });
+});

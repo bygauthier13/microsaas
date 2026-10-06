@@ -72,6 +72,7 @@ export function passwordResetEmail(url: string): Rendered {
 
 export function welcomeEmail(opts: { name: string; orgName: string }): Rendered {
   const url = `${env.appUrl}/app`;
+  const guide = `${env.appUrl}/guide`;
   return {
     subject: `Welcome to RepairClock, ${opts.name || "there"}`,
     html: layout({
@@ -79,9 +80,10 @@ export function welcomeEmail(opts: { name: string; orgName: string }): Rendered 
       heading: `${opts.orgName} is set up`,
       body: `<p>Every damp, mould or hazard report you log now gets its statutory deadlines worked out automatically — Scottish and English bank holidays included.</p>
 <p>The fastest way to see the value: log the next report you receive (or one from this week) and send the landlord an approval link.</p>${button(url, "Open RepairClock")}
+<p>New to it? <a href="${guide}">Watch the 2-minute setup guide</a>: every step, from importing your homes to sending the tenant's written summary.</p>
 <p style="color:#6b6457;font-size:13px">Your free trial lasts 14 days. No card needed until you choose a plan.</p>`,
     }),
-    text: `${opts.orgName} is set up on RepairClock. Open: ${url}`,
+    text: `${opts.orgName} is set up on RepairClock. Open: ${url}\n\nWatch the 2-minute setup guide: ${guide}`,
   };
 }
 
