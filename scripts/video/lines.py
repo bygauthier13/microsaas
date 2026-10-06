@@ -2,7 +2,8 @@
 
 With audio/<id>.mp3 present, each sentence break is the pause ffmpeg finds nearest to where the text
 says it should be. Without the audio (to preview the visuals), times are estimated from the clip
-lengths in voice.json and the length of each sentence.
+lengths in voice.json and the length of each sentence. Each line also gets the gain that brings
+its clip to the same loudness as the others.
 """
 import json, os, re, subprocess, sys
 
@@ -19,6 +20,12 @@ def weight(text):
 def probe(path):
     out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", path], capture_output=True, text=True, check=True)
     return float(out.stdout.strip())
+
+
+def loudness(path):
+    err = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", path, "-af", "ebur128", "-f", "null", "-"], capture_output=True, text=True).stderr
+    found = re.findall(r"I:\s+(-?[\d.]+) LUFS", err)
+    return float(found[-1]) if found else None
 
 
 def silences(path):
@@ -38,7 +45,10 @@ for s in steps:
     total = probe(path) if have else voice[s["id"]]["seconds"]
     head, tail = 0.05, total - 0.1
     gaps = []
+    gain = 0.0
     if have:
+        level = loudness(path)
+        gain = round(-20 - level, 2) if level is not None else 0.0
         sil = silences(path)
         if sil and sil[0][0] <= 0.02 and sil[0][1]:
             head = sil[0][1]
@@ -64,7 +74,7 @@ for s in steps:
     ends = edges[1:] + [min(total, tail + 0.15)]
     for k, line in enumerate(s["lines"]):
         out.append({"id": s["id"], "k": k, "file": path, "from": round(starts[k], 3), "to": round(ends[k], 3),
-                    "seconds": round(ends[k] - starts[k], 3), "cap": line["cap"], "estimated": not have})
+                    "seconds": round(ends[k] - starts[k], 3), "gain": gain, "cap": line["cap"], "estimated": not have})
 
 json.dump(out, open(f"{base}/audio/lines.json", "w"), indent=1)
 for l in out:

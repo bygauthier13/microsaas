@@ -322,7 +322,7 @@ async function startRecording(page, file, t0) {
     const wait = voiceEnd + (k === 0 ? STEP_GAP : GAP) - now();
     if (wait > 0) await sleep(wait * 1000);
     const at = now();
-    timeline.push({ id, k, file: l.file, from: l.from, to: l.to, at });
+    timeline.push({ id, k, file: l.file, from: l.from, to: l.to, gain: l.gain, at });
     voiceEnd = at + l.seconds;
     await ui("caption", l.cap);
   };

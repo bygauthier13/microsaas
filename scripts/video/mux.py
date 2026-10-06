@@ -1,6 +1,6 @@
 """Lays the voice lines over the recorded walkthrough: python3 mux.py WORK [OUTPUT.mp4].
 
-Each timeline line plays `file` (or just its from-to part) at its recorded time. Lines whose file
+Each timeline line plays `file` (or just its from-to part, with its gain) at its recorded time. Lines whose file
 is missing are left silent, so the visuals can be previewed before the voice is ready.
 """
 import json, os, subprocess, sys
@@ -17,7 +17,8 @@ for line in t["lines"]:
     inputs += ["-i", line["file"]]
     ms = max(0, int(round((line["at"] - start) * 1000)))
     trim = f"atrim=start={line['from']}:end={line['to']},asetpts=PTS-STARTPTS," if line.get("to") else ""
-    filters.append(f"[{i}:a]{trim}aresample=48000,adelay={ms}|{ms}[a{i}]")
+    gain = f"volume={line['gain']}dB," if line.get("gain") else ""
+    filters.append(f"[{i}:a]{trim}{gain}aresample=48000,adelay={ms}|{ms}[a{i}]")
     labels.append(f"[a{i}]")
 length = f"{end - start:.2f}"
 if labels:
