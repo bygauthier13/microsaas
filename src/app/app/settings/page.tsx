@@ -99,12 +99,19 @@ export default async function SettingsPage() {
             </fieldset>
 
             <fieldset className="space-y-3 border-t border-line pt-5" disabled={!owner}>
-              <legend className="mb-2 font-semibold">Reminders</legend>
+              <legend className="mb-2 font-semibold">Emails</legend>
               <label className="flex items-start gap-3 text-sm">
                 <input type="checkbox" name="digestEnabled" defaultChecked={s.digestEnabled !== false} className="mt-0.5 h-4 w-4 accent-[var(--color-ink)]" />
                 <span>
                   <span className="font-medium">Morning deadline digest</span>
                   <span className="block text-muted">One email early each weekday morning listing anything overdue, due today or due in the next 2 working days, plus unanswered landlord approvals. Skipped when nothing needs you.</span>
+                </span>
+              </label>
+              <label className="flex items-start gap-3 text-sm">
+                <input type="checkbox" name="copyLettersToReplyTo" defaultChecked={s.copyLettersToReplyTo !== false} className="mt-0.5 h-4 w-4 accent-[var(--color-ink)]" />
+                <span>
+                  <span className="font-medium">Send us a copy</span>
+                  <span className="block text-muted">Tenant letters and landlord emails go out as “{org.name} via RepairClock”. Tick this to get a copy of each one in the reply-to inbox above.</span>
                 </span>
               </label>
             </fieldset>

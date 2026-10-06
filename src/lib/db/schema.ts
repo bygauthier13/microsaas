@@ -78,6 +78,8 @@ export interface OrgSettings {
   adviceSignpost?: string;
   repairPolicyNote?: string;
   digestEnabled?: boolean;
+  /** BCC the reply-to address on tenant letters and landlord emails (on unless false). */
+  copyLettersToReplyTo?: boolean;
 }
 
 export const organizations = pgTable("organizations", {

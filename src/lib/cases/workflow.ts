@@ -15,7 +15,7 @@ import {
 } from "@/lib/db/schema";
 import { renderLetterPdf } from "@/lib/docs/pdf";
 import type { LetterDocument } from "@/lib/docs/letters";
-import { sendEmail } from "@/lib/email/send";
+import { agencySender, sendEmail } from "@/lib/email/send";
 import { approvalRequestEmail, tenantLetterEmail } from "@/lib/email/templates";
 import { formatPence } from "@/lib/domain";
 import { env } from "@/lib/env";
@@ -132,6 +132,7 @@ export async function issueLetter(
       caseId: input.caseId,
       isDemo: input.org.isDemo,
       replyTo: input.org.settings?.replyToEmail ?? null,
+      ...agencySender(input.org),
       attachments: [{ filename, content: Buffer.from(pdf), contentType: "application/pdf" }],
     });
     emailed = res.status !== "failed";
@@ -219,6 +220,7 @@ export async function requestLandlordApproval(
       caseId: input.caseId,
       isDemo: input.org.isDemo,
       replyTo: input.org.settings?.replyToEmail ?? null,
+      ...agencySender(input.org),
     });
     emailStatus = res.status;
   }

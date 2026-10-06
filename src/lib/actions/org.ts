@@ -69,6 +69,7 @@ export async function updateSettingsAction(_prev: ActionState, fd: FormData): Pr
           adviceSignpost: optStr(fd, "adviceSignpost", 2000) ?? undefined,
           repairPolicyNote: optStr(fd, "repairPolicyNote", 1000) ?? undefined,
           digestEnabled: str(fd, "digestEnabled", 5) === "on",
+          copyLettersToReplyTo: str(fd, "copyLettersToReplyTo", 5) === "on",
         },
       })
       .where(eq(organizations.id, org.id));

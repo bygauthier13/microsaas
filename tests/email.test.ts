@@ -41,3 +41,31 @@ describe("sendEmail reply-to", () => {
     expect(sent[0].replyTo).toBe("lettings@agency.example");
   });
 });
+
+describe("agency sender name and copy", () => {
+  beforeEach(() => {
+    sent.length = 0;
+    process.env.RESEND_API_KEY = "re_test";
+    process.env.EMAIL_FROM = "RepairClock <notifications@repairclock.example.com>";
+  });
+
+  it("shows the agency's name but keeps the sending address", async () => {
+    const { fromWithName } = await import("@/lib/email/send");
+    expect(fromWithName("RepairClock <notifications@x.com>", "Test Lettings via RepairClock")).toBe('"Test Lettings via RepairClock" <notifications@x.com>');
+    expect(fromWithName("notifications@x.com", 'Evil" <a@b.c>\nBcc: x')).toBe('"Evil a@b.c Bcc: x" <notifications@x.com>');
+    expect(fromWithName("RepairClock <notifications@x.com>", "  ")).toBe("RepairClock <notifications@x.com>");
+  });
+
+  it("copies the agency's inbox unless switched off, never the recipient twice", async () => {
+    const { agencySender, sendEmail } = await import("@/lib/email/send");
+    const org = { name: "Test Lettings", settings: { replyToEmail: "sara@testlettings.example" } };
+    expect(agencySender(org)).toEqual({ fromName: "Test Lettings via RepairClock", bcc: "sara@testlettings.example" });
+    expect(agencySender({ ...org, settings: { ...org.settings, copyLettersToReplyTo: false } }).bcc).toBeNull();
+    expect(agencySender({ name: "No Inbox Lettings", settings: {} }).bcc).toBeNull();
+
+    await sendEmail({ to: "tenant@example.com", subject: "s", html: "<p>h</p>", text: "t", category: "written_summary", replyTo: "sara@testlettings.example", ...agencySender(org) });
+    await sendEmail({ to: "sara@testlettings.example", subject: "s", html: "<p>h</p>", text: "t", category: "approval_request", ...agencySender(org) });
+    expect(sent[0]).toMatchObject({ from: '"Test Lettings via RepairClock" <notifications@repairclock.example.com>', bcc: "sara@testlettings.example" });
+    expect(sent[1].bcc).toBeUndefined();
+  });
+});

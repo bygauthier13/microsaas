@@ -21,6 +21,10 @@ export interface EmailInput {
   caseId?: string | null;
   isDemo?: boolean;
   replyTo?: string | null;
+  /** Display name shown as the sender, e.g. "Test Lettings via RepairClock". */
+  fromName?: string | null;
+  /** Blind copy, e.g. the agency's own inbox. Skipped when it equals the recipient. */
+  bcc?: string | null;
   attachments?: Array<{ filename: string; content: Buffer; contentType?: string }>;
 }
 
@@ -32,10 +36,30 @@ export interface EmailResult {
 
 let resendClient: Resend | null = null;
 
+/** EMAIL_FROM with its display name swapped for `name` (the address stays the same). */
+export function fromWithName(emailFrom: string, name?: string | null): string {
+  const clean = (name ?? "").replace(/[\r\n]+/g, " ").replace(/["<>\\]/g, "").replace(/\s+/g, " ").trim().slice(0, 80);
+  if (!clean) return emailFrom;
+  const address = emailFrom.match(/<([^>]+)>/)?.[1] ?? emailFrom.trim();
+  return `"${clean}" <${address}>`;
+}
+
 function resend(): Resend | null {
   if (!env.resendApiKey) return null;
   if (!resendClient) resendClient = new Resend(env.resendApiKey);
   return resendClient;
+}
+
+/**
+ * Sender name and copy for emails an agency sends to its tenants and landlords: they show the
+ * agency's name, and a blind copy goes to the agency's reply-to inbox unless switched off.
+ */
+export function agencySender(org: { name: string; settings?: { replyToEmail?: string; copyLettersToReplyTo?: boolean } | null }) {
+  const replyTo = org.settings?.replyToEmail ?? null;
+  return {
+    fromName: `${org.name} via RepairClock`,
+    bcc: replyTo && org.settings?.copyLettersToReplyTo !== false ? replyTo : null,
+  };
 }
 
 export async function sendEmail(input: EmailInput): Promise<EmailResult> {
@@ -44,12 +68,13 @@ export async function sendEmail(input: EmailInput): Promise<EmailResult> {
   if (client) {
     try {
       const { data, error } = await client.emails.send({
-        from: env.emailFrom,
+        from: fromWithName(env.emailFrom, input.fromName),
         to: input.to,
         subject: input.subject,
         html: input.html,
         text: input.text,
         replyTo: input.replyTo || env.company.email,
+        bcc: input.bcc && input.bcc.toLowerCase() !== input.to.toLowerCase() ? input.bcc : undefined,
         attachments: input.attachments?.map((a) => ({
           filename: a.filename,
           content: a.content,

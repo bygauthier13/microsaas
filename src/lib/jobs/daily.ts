@@ -22,7 +22,7 @@ import {
   sessions,
   users,
 } from "@/lib/db/schema";
-import { sendEmail } from "@/lib/email/send";
+import { agencySender, sendEmail } from "@/lib/email/send";
 import { approvalRequestEmail, digestEmail, firstReportNudgeEmail, importHomesNudgeEmail, trialEndingEmail } from "@/lib/email/templates";
 import { formatPence } from "@/lib/domain";
 import { env } from "@/lib/env";
@@ -228,6 +228,7 @@ export async function runDailyJobs(now = new Date()): Promise<DailyReport> {
         orgId: r.org.id,
         caseId: r.c.id,
         replyTo: r.org.settings?.replyToEmail ?? null,
+        ...agencySender(r.org),
       });
       await addEvent(db, {
         orgId: r.org.id,
