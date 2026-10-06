@@ -31,7 +31,8 @@ function shouldUseSsl(url: string): boolean {
 }
 
 async function init(): Promise<DB> {
-  const url = process.env.DATABASE_URL;
+  // Vercel's Neon integration provides DATABASE_URL; some setups only expose POSTGRES_URL.
+  const url = process.env.DATABASE_URL || process.env.POSTGRES_URL;
   const autoMigrate = process.env.DB_AUTO_MIGRATE !== "false";
 
   if (url) {

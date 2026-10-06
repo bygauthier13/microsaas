@@ -10,7 +10,7 @@ export default function TermsPage() {
       <h1 className="display mt-3 text-4xl">Terms of service</h1>
       <div className="prose-legal mt-6 text-ink-2">
         <p>
-          These terms are between {c.name} (company number {c.number}, {c.address}) and the organisation that creates a RepairClock workspace (&ldquo;you&rdquo;). By creating an
+          These terms are between {c.name} ({c.number ? `company number ${c.number}, ` : ""}{c.address}) and the organisation that creates a RepairClock workspace (&ldquo;you&rdquo;). By creating an
           account you confirm you can accept them on your organisation&apos;s behalf.
         </p>
         <h2>1. The service</h2>

@@ -10,7 +10,7 @@ export default function PrivacyPage() {
       <h1 className="display mt-3 text-4xl">Privacy notice</h1>
       <div className="prose-legal mt-6 text-ink-2">
         <p>
-          RepairClock is operated by {c.name} (company number {c.number}), {c.address} (&ldquo;we&rdquo;). This notice explains how we handle personal data when you visit our
+          RepairClock is operated by {c.name}{c.number ? ` (company number ${c.number})` : ""}, {c.address} (&ldquo;we&rdquo;). This notice explains how we handle personal data when you visit our
           website and when your organisation uses RepairClock. Contact: <a href={`mailto:${c.email}`}>{c.email}</a>.
         </p>
 

@@ -70,7 +70,8 @@ export const env = {
   get company() {
     return {
       name: str("COMPANY_NAME") ?? "[Company name to be added]",
-      number: str("COMPANY_NUMBER") ?? "[company number]",
+      /** Empty for sole traders (no company number). */
+      number: str("COMPANY_NUMBER") ?? null,
       address: str("COMPANY_ADDRESS") ?? "[registered office address]",
       email: str("SUPPORT_EMAIL") ?? "hello@repairclock.co.uk",
     };

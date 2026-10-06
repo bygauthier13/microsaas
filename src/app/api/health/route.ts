@@ -19,7 +19,7 @@ export async function GET() {
       : "not set up yet (add STRIPE_SECRET_KEY)",
     stripe_webhook: env.stripeWebhookSecret ? "set" : "not set up yet (add STRIPE_WEBHOOK_SECRET)",
     daily_emails_job: env.cronSecret ? "set" : "not set up yet (add CRON_SECRET)",
-    company_details: process.env.COMPANY_NAME ? "set" : "not set up yet (add COMPANY_NAME, COMPANY_NUMBER, COMPANY_ADDRESS)",
+    company_details: process.env.COMPANY_NAME && process.env.COMPANY_ADDRESS ? "set" : "not set up yet (add COMPANY_NAME and COMPANY_ADDRESS; COMPANY_NUMBER only if you have a limited company)",
     ai_letter_polishing: env.anthropicApiKey ? "on" : "off (optional)",
   };
   try {
