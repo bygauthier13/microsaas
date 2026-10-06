@@ -22,7 +22,7 @@ Independent Scottish letting agencies that **manage** homes (they handle repairs
 
 Best signals: older tenement or ex-council stock; Google reviews that mention mould or slow repairs; they already use Fixflo, Arthur, Alto or Reapit; they've posted about the 6 October changes.
 
-Skip: tenant-find-only agents, big corporates, agencies with fewer than ~40 managed homes (point those at the £12 Landlord plan instead).
+Skip for now: tenant-find-only agents, big corporates, and agencies with fewer than ~40 managed homes. The £12 Landlord plan only covers 10 homes, so a small agency would need the £99 Agent plan, which is a hard sell at that size. Note them in the sheet in case a smaller plan is added later.
 
 ## 2. Where to find them
 
