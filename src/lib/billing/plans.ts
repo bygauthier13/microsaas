@@ -14,6 +14,15 @@ export interface Plan {
   features: string[];
 }
 
+/** Why `plan` can't hold a workspace with this usage, or null when it fits. */
+export function planMisfit(plan: PaidPlanId, usage: { homes: number; seats: number }): string | null {
+  const p = PLANS[plan];
+  if (usage.homes > p.homes) return `You have ${usage.homes} active homes and the ${p.name} plan covers ${p.homes}.`;
+  if (usage.seats > p.seats)
+    return `You have ${usage.seats} team members (including invitations) and the ${p.name} plan includes ${p.seats}.`;
+  return null;
+}
+
 export const TRIAL_DAYS = 14;
 export const TRIAL_HOMES = 300;
 

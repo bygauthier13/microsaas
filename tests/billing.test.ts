@@ -116,3 +116,13 @@ describe("Stripe webhook endpoint", () => {
     expect(orgAccess(row).canCreate).toBe(false);
   });
 });
+
+describe("planMisfit", () => {
+  it("refuses a plan smaller than the workspace's homes or team", async () => {
+    const { planMisfit } = await import("@/lib/billing/plans");
+    expect(planMisfit("landlord", { homes: 300, seats: 1 })).toMatch(/300 active homes/);
+    expect(planMisfit("landlord", { homes: 8, seats: 3 })).toMatch(/3 team members/);
+    expect(planMisfit("agent", { homes: 300, seats: 5 })).toBeNull();
+    expect(planMisfit("agent", { homes: 301, seats: 2 })).toMatch(/Agent plan covers 300/);
+  });
+});

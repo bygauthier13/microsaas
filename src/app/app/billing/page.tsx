@@ -6,12 +6,12 @@ import { Alert, Badge, Card, PageHeader } from "@/components/ui";
 import { SubmitButton } from "@/components/submit-button";
 import { openPortalAction, simulatedCancelAction, simulatedResumeAction, startCheckoutAction } from "@/lib/actions/billing";
 import { requireOrg } from "@/lib/auth/session";
-import { PLANS, PLAN_ORDER, formatGbp, isPaidPlan, orgAccess, recommendedPlan } from "@/lib/billing/plans";
+import { PLANS, PLAN_ORDER, formatGbp, isPaidPlan, orgAccess, planMisfit, recommendedPlan } from "@/lib/billing/plans";
 import { syncFromCheckoutSession } from "@/lib/billing/stripe";
 import { getDb } from "@/lib/db";
 import { organizations } from "@/lib/db/schema";
 import { env } from "@/lib/env";
-import { activeHomes } from "@/lib/org";
+import { activeHomes, seatsInUse } from "@/lib/org";
 import { formatInstant } from "@/lib/rules/calendar";
 
 export const metadata = { title: "Plan & billing" };
@@ -23,6 +23,7 @@ const ERRORS: Record<string, string> = {
   checkout: "We couldn't start checkout. Please try again, or contact support.",
   portal: "We couldn't open the billing portal. Please try again.",
   portal_simulated: "The billing portal needs Stripe. In simulated mode, use the cancel button below.",
+  too_small: "That plan is smaller than your workspace. Choose a bigger plan, or archive homes or remove team members first.",
   not_configured: "Card payments aren't switched on yet, so nothing was charged and your plan hasn't changed.",
 };
 
@@ -40,7 +41,7 @@ export default async function BillingPage({ searchParams }: PageProps<"/app/bill
     }
   }
   const access = orgAccess(org);
-  const homes = await activeHomes(org.id);
+  const [homes, seats] = await Promise.all([activeHomes(org.id), seatsInUse(org.id)]);
   const interval = sp.interval === "year" ? "year" : "month";
   const recommended = recommendedPlan(homes, org.kind);
   const current = isPaidPlan(org.plan) && access.state !== "canceled" ? org.plan : null;
@@ -152,7 +153,7 @@ export default async function BillingPage({ searchParams }: PageProps<"/app/bill
           const isCurrent = current === id && org.billingInterval === interval;
           const isRecommended = id === recommended;
           const price = interval === "year" ? plan.annual : plan.monthly;
-          const tooSmall = homes > plan.homes;
+          const tooSmall = planMisfit(id, { homes, seats }) !== null;
           return (
             <Card key={id} className={clsx("flex flex-col p-5", isRecommended && "ring-2 ring-signal/40 border-signal/40")}>
               <div className="flex items-center justify-between gap-2">
@@ -182,7 +183,7 @@ export default async function BillingPage({ searchParams }: PageProps<"/app/bill
                     disabled={isCurrent || tooSmall}
                     pendingLabel="Starting checkout…"
                   >
-                    {isCurrent ? "Your plan" : tooSmall ? `Over ${plan.homes} homes` : current ? `Switch to ${plan.name}` : `Choose ${plan.name}`}
+                    {isCurrent ? "Your plan" : tooSmall ? (homes > plan.homes ? `Over ${plan.homes} homes` : `Over ${plan.seats} team members`) : current ? `Switch to ${plan.name}` : `Choose ${plan.name}`}
                   </SubmitButton>
                 </form>
               ) : null}

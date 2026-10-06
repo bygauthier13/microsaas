@@ -4,11 +4,12 @@ import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { track } from "@/lib/analytics";
 import { requireOrg } from "@/lib/auth/session";
-import { isPaidPlan } from "@/lib/billing/plans";
+import { isPaidPlan, planMisfit } from "@/lib/billing/plans";
 import { createCheckoutUrl, createPortalUrl } from "@/lib/billing/stripe";
 import { getDb } from "@/lib/db";
 import { organizations } from "@/lib/db/schema";
 import { env } from "@/lib/env";
+import { activeHomes, seatsInUse } from "@/lib/org";
 import { str } from "./helpers";
 
 async function ownerOrg() {
@@ -23,6 +24,10 @@ export async function startCheckoutAction(fd: FormData): Promise<void> {
   const plan = str(fd, "plan", 20);
   const interval = str(fd, "interval", 10) === "year" ? "year" : "month";
   if (!isPaidPlan(plan)) redirect("/app/billing?error=plan");
+  // A plan smaller than the workspace (e.g. 300 homes imported during the trial, then the
+  // 10-home plan) would leave everything usable for the lowest price.
+  const [homes, seats] = await Promise.all([activeHomes(org.id), seatsInUse(org.id)]);
+  if (planMisfit(plan, { homes, seats })) redirect("/app/billing?error=too_small");
   await track("checkout_started", { orgId: org.id, userId: user.id, props: { plan, interval, mode: env.billingMode } });
 
   if (env.billingMode === "stripe") {

@@ -11,7 +11,7 @@ import { getDb } from "@/lib/db";
 import { approvalRequests, caseDelays, cases, landlords, properties } from "@/lib/db/schema";
 import { draftDelayNotice, type LetterDocument } from "@/lib/docs/letters";
 import { CAUSES, DELAY_REASONS, SOURCES, orgInitials } from "@/lib/domain";
-import { homesHeadroom, nextCaseReference } from "@/lib/org";
+import { activeHomes, homesHeadroom, nextCaseReference } from "@/lib/org";
 import { orgAccess } from "@/lib/billing/plans";
 import { compareIso, formatIsoDate, londonDateOf } from "@/lib/rules/calendar";
 import { HAZARD_KEYS, hazardLabel, type HazardKey } from "@/lib/rules/hazards";
@@ -60,6 +60,12 @@ export async function createCaseAction(_prev: ActionState, fd: FormData): Promis
     const access = orgAccess(org);
     if (!access.canCreate) {
       throw new ActionError("Your trial has ended. Choose a plan to log new reports — existing cases stay fully usable.");
+    }
+    const homesNow = await activeHomes(org.id);
+    if (homesNow > access.homesLimit) {
+      throw new ActionError(
+        `Your plan covers ${access.homesLimit} homes and you have ${homesNow}. Upgrade, or archive homes you no longer manage, to log new reports. Existing cases stay fully usable.`,
+      );
     }
     const db = await getDb();
 
