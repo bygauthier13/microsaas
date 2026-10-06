@@ -12,15 +12,15 @@ North star: **paying agencies with an active case in the last 30 days.** Seconda
 | 4 | Stripe: live account, `npm run stripe:setup`, webhook endpoint, `FOUNDING20` coupon | Test-mode then live checkout completes; portal cancels |
 | 5 | Have a solicitor or Propertymark-savvy adviser read the written summary and delay notice templates and the terms/privacy notice | Changes merged |
 | 6 | Build the prospect sheet: 200 agencies from the Scottish Letting Agent Register + Citylets, ranked by fit | 200 rows with decision-maker names |
-| 7 | Start outreach: 25 new prospects/day (email + LinkedIn), calls on day 2 | 100 first touches by Friday |
+| 7 | Start outreach on a separate warmed-up domain: 10 emails/day in week 1, rising to 30–40/day | 50 first emails by Friday |
 | 8 | Post on LinkedIn: "A damp report received today must be investigated by Tue 20 Oct — here's how the working days fall" + calculator link | 1 post/day this week |
 | 9 | Submit the calculator and Scotland guide to Google Search Console; request indexing | Indexed |
 
 ## Weeks 2–4 (13 October – 2 November): first 10 paying agencies
 
-- Run 2–3 demos/day; set up workspaces on the call; white-glove CSV imports the same day.
+- No calls: emails link to the self-guided demo and the free trial (see `FIRST_10_CUSTOMERS.md`). Answer replies by email; import any CSV an agency emails you the same day.
 - Daily: read the analytics funnel (SQL on `analytics_events`) — signups, onboarding, first case, summary issued, checkout.
-- Day-3 check-ins with every trial; call any trial with an overdue case in the digest.
+- Automatic trial nudges handle follow-up ("log your first report" after a day, "import your homes" after three, trial-ending reminder). Personally email any trial that looks stuck.
 - Content: "Christmas and New Year: how the bank holidays move your damp & mould deadlines" (calendar graphic + calculator) — publish by 1 Nov, send to every prospect.
 - Partnerships: contact 20 Scottish damp & mould surveyors/maintenance firms; offer them a free agent account and a referral fee (one month free per referred agency).
 - Associations: ask Propertymark Scotland and SAL about newsletter sponsorship or a member webinar ("running the 10-3-5 rule in practice").
@@ -49,9 +49,10 @@ North star: **paying agencies with an active case in the last 30 days.** Seconda
 
 | Metric | Target |
 | --- | --- |
-| First touches / week | 125 |
-| Reply rate | ≥ 10% |
-| Demo → trial | ≥ 70% |
+| First emails / week | 150–200 (after ramp-up) |
+| Reply rate | ≥ 3% |
+| Email → demo or calculator visit | ≥ 6% |
+| Demo visit → trial | ≥ 25% |
 | Trial activation (first report + summary/approval in 7 days) | ≥ 60% |
 | Trial → paid | ≥ 40% of activated |
 | Logo churn (monthly) | < 3% |
@@ -59,6 +60,6 @@ North star: **paying agencies with an active case in the last 30 days.** Seconda
 
 ## Kill / pivot criteria
 
-- After **150 conversations**, fewer than **5 paying** agencies → the urgency isn't there; interview the "no"s and re-position (e.g. towards social landlords or surveyors) before building anything new.
+- After **600 agencies emailed**, fewer than **3 paying** → the urgency isn't there; interview the "no"s and re-position (e.g. towards social landlords or surveyors) before building anything new.
 - Activation < 30% → onboarding or value problem; sit with three trials and watch them use it.
 - If a major CRM ships equivalent statutory clocks: double down on the landlord approval loop, letters and evidence; offer an integration.

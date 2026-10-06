@@ -20,6 +20,8 @@ const CATEGORY: Record<string, string> = {
   password_reset: "Password reset",
   trial_ending: "Trial reminder",
   team_invite: "Team invitation",
+  nudge_first_report: "Getting started",
+  nudge_import_homes: "Getting started",
 };
 
 export default async function OutboxPage() {

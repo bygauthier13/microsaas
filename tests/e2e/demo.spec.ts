@@ -3,12 +3,15 @@ import { collectErrors } from "./helpers";
 
 test("demo workspace: explore, issue a summary, demo data stays isolated", async ({ page }) => {
   const errors = collectErrors(page);
-  await page.goto("/demo");
+  await page.goto("/demo?from=e2e");
   await page.getByRole("button", { name: "Open the demo workspace" }).click();
   await page.waitForURL("**/app");
   await expect(page.getByText("Demo workspace.")).toBeVisible();
   await expect(page.getByText("Lothian & Forth Lettings").first()).toBeVisible();
   await expect(page.getByText("Overdue", { exact: true }).first()).toBeVisible();
+  // The self-guided tour explains the product without a call.
+  await expect(page.getByRole("heading", { name: "Try it in 2 minutes" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Send a tenant letter in one click/ })).toBeVisible();
 
   // The case whose written summary is due today.
   await page.getByRole("link", { name: /22 Restalrig Avenue/ }).first().click();
@@ -16,6 +19,8 @@ test("demo workspace: explore, issue a summary, demo data stays isolated", async
   await expect(page.getByLabel("Written summary text")).toHaveValue(/Sam Reid, Reid Damp Surveys Ltd/);
   await page.getByRole("button", { name: "Issue written summary" }).click();
   await expect(page.getByText(/Written summary issued and emailed to the tenant/).first()).toBeVisible();
+  await page.goto("/app");
+  await expect(page.getByRole("link", { name: /Done Send a tenant letter in one click/ })).toBeVisible();
 
   // Demo emails are recorded, never delivered.
   await page.goto("/app/outbox");

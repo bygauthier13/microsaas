@@ -74,7 +74,7 @@ Copy `.env.example` to `.env.local`. Every service is optional locally; values o
 ```bash
 npm run dev            # dev server
 npm run build && npm start
-npm test               # unit + integration tests (Vitest) — 35 tests
+npm test               # unit + integration tests (Vitest) — 36 tests
 npm run test:e2e       # Playwright journeys (starts a dev server on :3100 if none is running)
 npm run lint           # ESLint
 npm run typecheck      # tsc --noEmit
@@ -96,6 +96,23 @@ The embedded database is single-process: stop `next dev` before running a CLI sc
 5. Check `GET /api/health` — it reports database, email, billing and AI modes (no secrets).
 
 Any Node host works too (`npm run build && npm start`); schedule `npm run cron:daily` (or `curl -H "Authorization: Bearer $CRON_SECRET" https://your-domain/api/cron/daily`) once a day.
+
+## What it costs to run
+
+Nothing has to be paid up front. Prices checked October 2026; check current pricing before you rely on them.
+
+| Item | Cost | Notes |
+| --- | --- | --- |
+| Product domain (.co.uk) | ~£10/year | |
+| Separate outreach domain + mailbox | ~£10/year + £0 | Zoho Mail free plan (custom domain, web/mobile only) or Google Workspace (~£7/user/month) |
+| Hosting (Vercel) | £0 while testing → ~$20/month (Pro) | The free Hobby plan is for non-commercial use only; move to Pro before taking payments |
+| Database (Neon) | £0 | Free plan: 0.5 GB per project; photos are stored in the database, so this is the first limit you hit (paid plans bill storage at ~$0.35/GB-month) |
+| Email (Resend) | £0 | Free plan: 3,000 emails/month, 100/day, one domain |
+| Payments (Stripe) | No monthly fee | UK cards ~1.5% + 20p per payment, plus 0.7% for subscription billing |
+| AI drafting (Anthropic) | Optional, pay per use | The app works fully without it |
+| ICO data protection fee | £52/year | Most UK businesses handling personal data must pay it; check the ICO's self-assessment |
+
+Roughly **£20 to start and ~£20–£40/month once you charge customers**, covered by the first subscription.
 
 ## Stripe setup (test mode)
 
@@ -148,7 +165,7 @@ src/
 
 ## Testing
 
-- `npm test` — 35 Vitest tests: working-day arithmetic against official holidays (incl. St Andrew's Day, the 2026 World Cup holiday and the Christmas cluster), Scotland/England duty evaluation, compensation, deterministic date formatting, AI redaction, Stripe webhook signature/idempotency/subscription sync, and the daily job (digest, reminder link rotation, demo deletion, weekend skip).
+- `npm test` — 36 Vitest tests: working-day arithmetic against official holidays (incl. St Andrew's Day, the 2026 World Cup holiday and the Christmas cluster), Scotland/England duty evaluation, compensation, deterministic date formatting, AI redaction, Stripe webhook signature/idempotency/subscription sync, and the daily job (digest, reminder link rotation, demo deletion, weekend skip, trial nudges).
 - `npm run test:e2e` — 7 Playwright journeys: full agent journey (sign-up → onboarding → report → investigation → summary → landlord approval in a second browser → repairs → upload → evidence pack → CSV → sign-out → protected routes), demo workspace, simulated billing upgrade/cancel/resume, error states & access control (incl. input preserved after validation errors), team invitation, and a mobile pass that asserts no horizontal scrolling. The suite passes against both `next dev` and a production build (`next start`).
 
 ## Known limitations

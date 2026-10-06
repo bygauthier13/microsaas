@@ -10,6 +10,7 @@ import { getDb } from "@/lib/db";
 import { landlords, organizations, properties, type OrgKind } from "@/lib/db/schema";
 import { sendEmail } from "@/lib/email/send";
 import { welcomeEmail } from "@/lib/email/templates";
+import { env } from "@/lib/env";
 import { createOrganization, homesHeadroom } from "@/lib/org";
 import { ActionError, emailField, oneOf, optStr, str, toState, type ActionState } from "./helpers";
 
@@ -40,7 +41,7 @@ export async function onboardingAction(_prev: ActionState, fd: FormData): Promis
       props: { kind, jurisdiction, homes: str(fd, "homes", 10) },
     });
     const mail = welcomeEmail({ name: user.name, orgName: name });
-    await sendEmail({ to: user.email, ...mail, category: "welcome", orgId: created.id });
+    await sendEmail({ to: user.email, ...mail, category: "welcome", orgId: created.id, replyTo: env.company.email });
   } catch (err) {
     return toState(err);
   }

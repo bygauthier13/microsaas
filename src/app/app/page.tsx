@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { and, count, eq, isNull } from "drizzle-orm";
 import { CheckCircle2, Circle, FolderClock, Plus, Upload } from "lucide-react";
+import { DemoTour } from "@/components/app/demo-tour";
 import { CaseListHeader, CaseRow, sortByUrgency } from "@/components/case/case-row";
 import { Alert, Card, EmptyState, LinkButton, PageHeader, Stat } from "@/components/ui";
 import { requireOrg } from "@/lib/auth/session";
@@ -61,6 +62,8 @@ export default async function DashboardPage() {
           </LinkButton>
         }
       />
+
+      {org.isDemo ? <DemoTour items={items} /> : null}
 
       {preCommencement ? (
         <Alert tone="signal" title={`The Scottish Regulations come into force on ${formatIsoDateLong(SCOTLAND_COMMENCEMENT)}`}>

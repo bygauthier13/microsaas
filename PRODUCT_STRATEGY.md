@@ -73,7 +73,7 @@ Annual = 10× monthly (2 months free). 14-day free trial, no card, 300 homes.
 
 ## 8. Acquisition strategy
 
-1. **Direct outreach to the Scottish Letting Agent Register** (email + LinkedIn + phone) with a personalised hook — "a report you receive today must be investigated by Tue 20 Oct" — and a 15-minute demo. See `FIRST_10_CUSTOMERS.md`.
+1. **Cold email to the Scottish Letting Agent Register**, no calls: a personalised hook ("a report you receive today must be investigated by Tue 20 Oct") linking to the self-guided demo and the no-card trial; automatic nudges and a founding discount code do the follow-up. See `FIRST_10_CUSTOMERS.md`.
 2. **Free deadline calculator** (`/tools/deadline-calculator`) and the Scotland guide (`/scotland`) as SEO/link magnets for "Awaab's Law Scotland", "damp and mould 10 working days", "written summary template".
 3. **Partnerships:** damp & mould surveyors and contractors (they see every agent's cases and benefit from faster approvals), Propertymark/SAL events, compliance consultants.
 4. **Built-in referral loop:** every landlord who approves via a link and every tenant letter shows "Sent using RepairClock" — landlords with several agents ask the others to use it.
@@ -89,7 +89,7 @@ Annual = 10× monthly (2 months free). 14-day free trial, no card, 300 homes.
 
 **Most realistic mix (12–18 months):** 70 Agent (£6,930) + 8 Agency (£1,992) + 2 Housing (£998) + 40 Landlord (£480) = **£10,400 MRR**, i.e. ~80 agencies (8% of the Scottish register) plus a small self-serve tail. Gross margin ≈ 95% (hosting/DB ~£50–150/mo, email ~£20/mo, AI ~£0.05 per draft, Stripe ~1.5% + 20p).
 
-Can one founder acquire ~80 agencies? Outreach maths: 1,000 agencies → 3 touches each over 6–8 weeks → 10–15% reply to a regulation-led, personalised message → ~100–150 conversations → 50% demo → 30–40% close ⇒ ~20–30 customers per full pass; repeated with referrals, partnerships and the English expansion, **yes**.
+Can one founder acquire ~80 agencies? Outreach maths (email only, no calls): 1,000 agencies → 4 emails each over ~3 weeks → ~6–10% open the demo or calculator → ~20–30 trials → ~5–10 paying per full pass of the register. A second pass with new hooks, referrals ("sent using RepairClock" on landlord links and letters), surveyor partnerships, SEO and the English expansion get to ~80. Slower than selling on calls, but **yes**, and the founder only writes emails.
 
 ## 10. Retention — why they'll still pay in six months
 

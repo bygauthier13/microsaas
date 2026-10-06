@@ -85,4 +85,24 @@ describe("daily job", () => {
     const saturday = await runDailyJobs(fromLondonLocal("2026-10-31", "07:00"));
     expect(saturday.digestsSent).toBe(0);
   });
+
+  it("nudges a new trial workspace that hasn't logged a report, once", async () => {
+    const { getDb } = await import("@/lib/db");
+    const schema = await import("@/lib/db/schema");
+    const { createOrganization } = await import("@/lib/org");
+    const { runDailyJobs } = await import("@/lib/jobs/daily");
+    const db = await getDb();
+    const [user] = await db.insert(schema.users).values({ email: "quiet@example.com", name: "Quinn Quiet" }).returning();
+    const org = await createOrganization({ userId: user.id, name: "Quiet Lettings", kind: "letting_agent", jurisdiction: "scotland" });
+    const later = new Date(Date.now() + 36 * 3600_000);
+    const first = await runDailyJobs(later);
+    expect(first.nudgesSent).toBeGreaterThanOrEqual(1);
+    const nudges = await db.select().from(schema.outboxEmails).where(and(eq(schema.outboxEmails.orgId, org.id), eq(schema.outboxEmails.category, "nudge_first_report")));
+    expect(nudges).toHaveLength(1);
+    expect(nudges[0].to).toBe("quiet@example.com");
+    expect(nudges[0].text).toContain("must be investigated by");
+    await runDailyJobs(later);
+    const again = await db.select().from(schema.outboxEmails).where(and(eq(schema.outboxEmails.orgId, org.id), eq(schema.outboxEmails.category, "nudge_first_report")));
+    expect(again).toHaveLength(1);
+  });
 });

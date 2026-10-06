@@ -6,7 +6,7 @@
  *  4. trial-ending reminders
  *  5. expire simulated subscriptions; tidy sessions, reset tokens and rate-limit rows
  */
-import { and, eq, gt, inArray, isNotNull, lt, or, sql } from "drizzle-orm";
+import { and, count, eq, gt, inArray, isNotNull, isNull, lt, or, sql } from "drizzle-orm";
 import { addEvent, listCases, propertyAddress } from "@/lib/cases/service";
 import { getDb } from "@/lib/db";
 import {
@@ -23,11 +23,11 @@ import {
   users,
 } from "@/lib/db/schema";
 import { sendEmail } from "@/lib/email/send";
-import { approvalRequestEmail, digestEmail, trialEndingEmail } from "@/lib/email/templates";
+import { approvalRequestEmail, digestEmail, firstReportNudgeEmail, importHomesNudgeEmail, trialEndingEmail } from "@/lib/email/templates";
 import { formatPence } from "@/lib/domain";
 import { env } from "@/lib/env";
 import { orgAccess } from "@/lib/billing/plans";
-import { dayOfWeek, formatInstant, formatIsoDate, formatIsoDateLong, londonDateOf } from "@/lib/rules/calendar";
+import { addWorkingDays, dayOfWeek, formatInstant, formatIsoDate, formatIsoDateLong, londonDateOf } from "@/lib/rules/calendar";
 import { randomToken, sha256 } from "@/lib/security/crypto";
 
 export interface DailyReport {
@@ -35,6 +35,7 @@ export interface DailyReport {
   digestsSent: number;
   approvalRemindersSent: number;
   trialRemindersSent: number;
+  nudgesSent: number;
   subscriptionsExpired: number;
 }
 
@@ -42,7 +43,7 @@ const DAY = 86_400_000;
 
 export async function runDailyJobs(now = new Date()): Promise<DailyReport> {
   const db = await getDb();
-  const report: DailyReport = { demoWorkspacesDeleted: 0, digestsSent: 0, approvalRemindersSent: 0, trialRemindersSent: 0, subscriptionsExpired: 0 };
+  const report: DailyReport = { demoWorkspacesDeleted: 0, digestsSent: 0, approvalRemindersSent: 0, trialRemindersSent: 0, nudgesSent: 0, subscriptionsExpired: 0 };
 
   // 1. Demo workspaces past their expiry (users created for the demo go with them).
   const expiredDemos = await db
@@ -133,6 +134,40 @@ export async function runDailyJobs(now = new Date()): Promise<DailyReport> {
         if (owner) {
           await sendEmail({ to: owner.email, ...trialEndingEmail({ orgName: org.name, daysLeft: access.trialDaysLeft }), category: "trial_ending", orgId: org.id });
           report.trialRemindersSent++;
+        }
+      }
+    }
+
+    // 4b. Onboarding nudges during the trial (each sent once): no report after a day, few homes after three.
+    if (access.state === "trial") {
+      const ageDays = (now.getTime() - org.createdAt.getTime()) / DAY;
+      const sentBefore = async (category: string) =>
+        (await db.select({ id: outboxEmails.id }).from(outboxEmails).where(and(eq(outboxEmails.orgId, org.id), eq(outboxEmails.category, category))).limit(1)).length > 0;
+      const owner = async () =>
+        (
+          await db
+            .select({ email: users.email, name: users.name })
+            .from(memberships)
+            .innerJoin(users, eq(users.id, memberships.userId))
+            .where(and(eq(memberships.orgId, org.id), eq(memberships.role, "owner")))
+            .limit(1)
+        )[0];
+      const [[caseCount], [homeCount]] = await Promise.all([
+        db.select({ n: count() }).from(cases).where(eq(cases.orgId, org.id)),
+        db.select({ n: count() }).from(properties).where(and(eq(properties.orgId, org.id), isNull(properties.archivedAt))),
+      ]);
+      if (ageDays >= 1 && Number(caseCount?.n ?? 0) === 0 && !(await sentBefore("nudge_first_report"))) {
+        const o = await owner();
+        if (o) {
+          const investigateBy = formatIsoDateLong(addWorkingDays(londonDateOf(now), 10, org.jurisdiction === "scotland" ? "scotland" : "england-and-wales"));
+          await sendEmail({ to: o.email, ...firstReportNudgeEmail({ name: o.name.split(" ")[0], orgName: org.name, investigateBy }), category: "nudge_first_report", orgId: org.id, replyTo: env.company.email });
+          report.nudgesSent++;
+        }
+      } else if (ageDays >= 3 && Number(caseCount?.n ?? 0) > 0 && Number(homeCount?.n ?? 0) < 5 && !(await sentBefore("nudge_import_homes"))) {
+        const o = await owner();
+        if (o) {
+          await sendEmail({ to: o.email, ...importHomesNudgeEmail({ name: o.name.split(" ")[0], orgName: org.name }), category: "nudge_import_homes", orgId: org.id, replyTo: env.company.email });
+          report.nudgesSent++;
         }
       }
     }

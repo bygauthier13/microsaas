@@ -52,6 +52,7 @@ export default async function DemoPage({ searchParams }: PageProps<"/demo">) {
           ))}
         </ul>
         <form action={startDemoAction} className="mt-6">
+          <input type="hidden" name="from" value={typeof sp.from === "string" ? sp.from.slice(0, 40) : ""} />
           <SubmitButton variant="signal" size="lg" className="w-full sm:w-auto" pendingLabel="Building your demo workspace…">
             Open the demo workspace
           </SubmitButton>

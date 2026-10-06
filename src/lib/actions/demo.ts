@@ -10,7 +10,7 @@ import { env } from "@/lib/env";
 import { clientIp, rateLimit } from "@/lib/security/rate-limit";
 
 /** Creates a fresh, isolated demo workspace and signs the visitor into it. */
-export async function startDemoAction(): Promise<void> {
+export async function startDemoAction(fd: FormData): Promise<void> {
   if (!env.demoEnabled) redirect("/demo?unavailable=1");
   const h = await headers();
   const limit = await rateLimit(`demo:${clientIp(h)}`, env.isProduction ? 10 : 200, 3600);
@@ -20,6 +20,8 @@ export async function startDemoAction(): Promise<void> {
   // Replace any existing session so a real account is never mixed with demo data.
   await destroySession();
   await createSession(user.id, h.get("user-agent"));
-  await track("demo_started", { orgId: org.id, userId: user.id, isDemo: true });
+  // Where the visitor came from (e.g. /demo?from=email1), to see which outreach works.
+  const from = String(fd.get("from") ?? "").toLowerCase();
+  await track("demo_started", { orgId: org.id, userId: user.id, isDemo: true, props: /^[a-z0-9-]{1,40}$/.test(from) ? { from } : {} });
   redirect("/app");
 }

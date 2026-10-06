@@ -1,155 +1,150 @@
-# First 10 customers
+# First 10 customers (email only, no calls)
 
-Goal: **10 paying Scottish letting agencies within 30 days of launch** (≈ £800–£1,000 MRR), each actively logging reports. Channel: **direct outreach** (email + LinkedIn + phone) to the public Scottish Letting Agent Register, backed by the free calculator, the Scotland guide and the live demo. Sales motion: 15-minute demo → set up their workspace on the call → self-serve checkout.
+Goal: **10 paying Scottish letting agencies** without booking a single call. People read an email, click through, understand the product on their own, start a trial and pay by card. You only write emails and answer replies.
 
-Timing is the hook: the Regulations came into force on **6 October 2026**; the first 10-working-day deadlines land around **20 October**; the Christmas cluster (a report on 18 December must be investigated by 7 January) will hit every agency at once.
+## How the funnel works
+
+1. **Cold email** (you) — short, plain text, one link. It explains the new law and their real deadline date.
+2. **Demo workspace** (automatic) — `/demo` opens a sample agency with no sign-up. A "Try it in 2 minutes" panel walks them through four things: a missed deadline, a tenant letter issued in one click, a landlord approval, a delay notice and its evidence pack.
+3. **Free trial** (automatic) — 14 days, no card. Two quick questions, then they log a real report and see their deadlines.
+4. **Nudges** (automatic) — if no report is logged after a day, they get "log your first report"; after 3 days with few homes, "import your homes from a CSV". Every weekday they get the deadline digest. Three days before the trial ends, they get a reminder.
+5. **Payment** (automatic) — they choose a plan and pay by card through Stripe. The founding discount code goes in your emails.
+
+What you do by hand: send emails, answer replies by email, and import a CSV for anyone who emails you one.
+
+**The trade-off.** Without calls fewer people convert, so you need more emails. Expect roughly **0.5–1% of agencies emailed to become paying customers** (estimate, not data). Ten customers means emailing most of the Scottish register, about 1,000 agencies, over 4–6 weeks. That's 25–40 emails a day.
 
 ---
 
-## 1. Ideal customer profile
+## 1. Who to email
 
-**Company:** independent Scottish letting agency, **80–1,500 managed homes**, 2–20 staff, full-management service (they handle repairs, not just tenant-find). Edinburgh, Glasgow, Aberdeen, Dundee, Fife, the Lothians, Stirling, Perth, Inverness. Registered on the Scottish Letting Agent Register; often a Propertymark or SAL member.
+Independent Scottish letting agencies that **manage** homes (they handle repairs, not just tenant-find), with roughly **80–1,500 managed homes**. Email the owner/director or the head of lettings or property management.
 
-**Buyer:** owner/director or head of lettings/property management. **Users:** property managers and maintenance coordinators.
+Best signals: older tenement or ex-council stock; Google reviews that mention mould or slow repairs; they already use Fixflo, Arthur, Alto or Reapit; they've posted about the 6 October changes.
 
-**Signals they're a great fit (prioritise these):**
-- Managed portfolio large enough to see damp/mould every month (≥ 80 homes), with older tenement or ex-council stock.
-- Google/Trustpilot reviews mentioning "mould", "damp", "repairs took weeks", "landlord wouldn't fix".
-- Using Fixflo/Arthur/Alto/Reapit (they buy software; they know the pain of repairs tracking).
-- Posting on LinkedIn about Awaab's Law / the 6 October changes, or attended Propertymark/SAL briefings.
-- Hiring a "property manager" or "maintenance coordinator" (workload signal).
+Skip: tenant-find-only agents, big corporates, agencies with fewer than ~40 managed homes (point those at the £12 Landlord plan instead).
 
-**Not a fit (skip for now):** tenant-find-only agents, very large corporates with in-house systems, agencies with < 40 managed homes (send them to the Landlord plan/self-serve).
+## 2. Where to find them
 
-## 2. Where to find them (first 100 prospects in a day)
+- **Scottish Letting Agent Register** (search "Scottish Letting Agent Register"): every registered agent with trading name and branch addresses.
+- **Citylets** and **S1homes** agent directories: listing counts show size.
+- **Rightmove / Zoopla / OnTheMarket** → "Find an agent" → letting agents by city.
+- **Google Maps**: "letting agents Edinburgh", "property management Glasgow", Aberdeen, Dundee, Fife, Stirling, Perth, Inverness.
+- **Agency websites**: the "Meet the team" page usually gives names and emails (or the firstname@agency.co.uk pattern).
+- **LinkedIn**: to find names only (titles "Lettings Director", "Head of Lettings", "Property Manager").
 
-1. **Scottish Letting Agent Register** — search "Scottish Letting Agent Register" (Scottish Government). Every registered agent, with trading names and branch addresses. Export/copy by local authority area.
-2. **Citylets** (Scotland's largest lettings portal) and **S1homes** — agent directories per city show listing volume (proxy for size).
-3. **Rightmove / Zoopla / OnTheMarket** → "Find an agent" → letting agents → Edinburgh/Glasgow/Aberdeen/Dundee; count "to let" listings.
-4. **Google Maps** — "letting agents Edinburgh", "property management Glasgow", etc. Check reviews for damp/mould mentions.
-5. **LinkedIn** (free or Sales Navigator) — people search: titles "Lettings Director", "Head of Lettings", "Property Manager", "Portfolio Manager", "Maintenance Coordinator"; location Scotland; industry Real Estate; company size 2–50.
-6. **Propertymark Scotland & SAL** — event exhibitor/attendee lists, regional meetings, members posting in their communities.
-7. **Partners**: Scottish damp & mould surveyors and property maintenance firms (search "damp survey Edinburgh", "mould treatment Glasgow letting agents") — each works for many agencies.
-
-### Search queries to copy
+Search queries:
 ```
 "letting agents" Edinburgh "property management"
 "letting agent" Glasgow "fully managed"
 site:linkedin.com/in ("lettings director" OR "head of lettings") Scotland
-site:linkedin.com/in "property manager" "letting" Edinburgh
 "letting agent" Aberdeen reviews mould
-"Awaab's Law" Scotland letting agent
-"damp and mould" "6 October" letting agent Scotland
-"damp survey" Edinburgh "letting agents"
 ```
 
-### Prospect sheet (columns)
-`Agency · Register no. · City · Est. managed homes · Website · Decision maker · Role · Email · LinkedIn · Phone · Fit signals · Touch 1 date · Touch 2 · Touch 3 · Reply? · Demo date · Trial started · Activated? (first report + summary) · Paid? · Plan · Notes`
+Keep a sheet: `Agency · Company type (Ltd/LLP/partnership/sole trader) · City · Est. homes · Contact name · Email · Email 1 date · Email 2 · Email 3 · Email 4 · Reply · Opted out? · Trial? · Paid?`
 
-Find emails via the agency website (team pages), LinkedIn, or the standard pattern (firstname@agency.co.uk) and verify. Generic inboxes (lettings@) are fine for touch 1 — ask for the right person.
+## 3. Before you send: rules and deliverability
 
-## 3. Outreach scripts
+**The law on cold email (UK PECR + UK GDPR):**
+- You may email **limited companies, LLPs and Scottish partnerships** (corporate subscribers) without prior consent, as long as you say who you are and give an easy way to opt out.
+- **Sole traders** (and English unincorporated partnerships) need consent first, so skip them. Check the agency's website footer or Companies House for "Ltd", "LLP" or a registered partnership.
+- Every email: your name, the company, a one-line opt-out ("Reply 'no thanks' and I won't email again"). Keep a do-not-contact list and honour it straight away.
+- This is a summary, not legal advice; the ICO's guidance on business-to-business marketing has the detail.
 
-Personalise the **bold** bits. Keep emails plain-text, under 150 words, from a personal address on your domain. Send Tuesday–Thursday, 08:00–09:30 or 13:00–14:00.
+**So your emails land in the inbox, not spam:**
+- Use a **separate domain** for outreach (e.g. `tryrepairclock.co.uk`, about £10/year) so a spam complaint can never hurt the domain your product emails come from.
+- Create a mailbox on it (Zoho Mail's free plan or Google Workspace) and set up SPF, DKIM and DMARC.
+- Ramp up slowly: **10 a day in week 1, 20 a day in week 2, then 30–40 a day**. Send by hand from the mailbox or with a simple mail-merge. You don't need a paid cold-email tool at this volume.
+- Plain text, one link, no images, no attachments. Personalise the first line.
 
-### Email 1 — Day 0 (the clock)
-**Subject:** Damp reports from today: investigated by Tue 20 Oct
+## 4. The emails
+
+Each email has to work on its own: someone who reads only that one should understand the problem, see their own deadline and know where to click. None of them asks for a call. Put `?from=email1` (email2, …) on the links so the analytics show which email works (`demo_started` and `signup_completed` record it).
+
+### Email 1 — Day 0
+**Subject:** Damp reports from today: investigate by Tue 20 Oct
 
 > Hi **Fiona**,
 >
-> Since 6 October every damp or mould report in a Scottish rented home has a legal clock: 10 working days to investigate, 3 to send the tenant a written summary, 5 to start repairs — Scottish bank holidays excluded. A report **Lothian & Forth** receives today has to be investigated by **Tuesday 20 October**.
+> Since 6 October, every damp or mould report in a Scottish rented home has a legal clock: 10 working days to get it investigated, 3 more to send the tenant a written summary, and repairs must start within 5. A report **Lothian & Forth** receives today has to be investigated by **Tuesday 20 October**.
 >
-> I've built RepairClock for letting agents: log the report in 30 seconds, get the landlord's approval with one link (it shows them the legal deadline), and the written summary and delay notice are drafted for you. Every step is on a timeline you could hand to a tribunal.
+> I built RepairClock for letting agents. You log the report and it counts every deadline (Scottish bank holidays included), gets the landlord's approval with one link, writes the tenant's letters and keeps a record you could show a tribunal.
 >
-> Worth 15 minutes this week? Or click around the demo — no sign-up: **repairclock.co.uk/demo**
+> There's a sample agency you can click around, no sign-up: **repairclock.co.uk/demo?from=email1**
 >
-> **[Your name]**, founder
-> P.S. Free working-day calculator for your team: repairclock.co.uk/tools/deadline-calculator
+> **[Your name]**, RepairClock
+> Reply "no thanks" and I won't email again.
 
-### Email 2 — Day 3 (the landlord problem)
-**Subject:** re: damp reports — the landlord bit
+### Email 2 — Day 4
+**Subject:** The slow part is the landlord
 
-> Hi **Fiona** — the part most agents tell me worries them isn't the investigation, it's waiting for landlords to approve the spend while the 10 days run.
+> Hi **Fiona**,
 >
-> In RepairClock the landlord gets a one-time link with the work, the cost and the statutory deadline in plain English; they approve or decline in one tap, it's recorded on the case, and reminders go automatically. If something outside your control causes a delay, you issue the tenant a delay notice in two clicks *before* the deadline.
+> The deadline most agents worry about isn't the investigation itself. It's waiting for the landlord to approve the spend while the 10 working days run.
 >
-> Would a 15-minute walkthrough on **Thursday** help? I'll use one of your real (anonymised) reports.
-
-### Email 3 — Day 7 (Christmas)
-**Subject:** a report on 18 December → investigated by 7 January
-
-> Hi **Fiona**, one for the diary: because of the Christmas and New Year bank holidays, a damp report received on **Friday 18 December** must be investigated by **Thursday 7 January** — and contractors will be off for most of that window.
+> In RepairClock the landlord gets a link showing the work, the cost and the legal deadline. They approve or decline with one tap, no login, and their answer is saved on the case with the date and time. Reminders go out automatically until they answer.
 >
-> RepairClock flags these before they become problems (morning digest of everything overdue, due today and due soon). Free 14-day trial, no card, import your homes from a CSV. Happy to set it up with you: **[calendar link]**
+> You can try it on the "Dalmeny Street" case in the demo: **repairclock.co.uk/demo?from=email2**
+>
+> **[Your name]**
+> Reply "no thanks" and I won't email again.
 
-### Email 4 — Day 14 (break-up)
-**Subject:** close the loop?
+### Email 3 — Day 9
+**Subject:** A report on 18 December → investigated by 7 January
 
-> Hi **Fiona** — I'll stop here. If damp & mould deadlines are already covered at **Lothian & Forth**, great. If not, the demo is at repairclock.co.uk/demo and I'm happy to set you up in 15 minutes whenever suits. Either way, the calculator is free to use.
+> Hi **Fiona**,
+>
+> One for the diary: with the Christmas and New Year bank holidays, a damp report received on **Friday 18 December** must be investigated by **Thursday 7 January**, while most contractors are off.
+>
+> RepairClock emails your team every weekday morning with anything overdue, due today or due in the next 2 working days, across every home you manage.
+>
+> Free 14-day trial, no card: **repairclock.co.uk/signup?from=email3**. Use code **FOUNDING20** at checkout for 20% off for your first year (offer ends 31 October).
+>
+> **[Your name]**
+> Reply "no thanks" and I won't email again.
 
-### LinkedIn
-**Connection note (≤ 300 chars):** *"Hi Fiona — I'm building a tool that runs the new Scottish damp & mould deadlines (10/3/5 working days) for letting agents, incl. landlord approvals and the written summary. Would value your take as someone who runs lettings in Edinburgh."*
+### Email 4 — Day 16 (last)
+**Subject:** Last one from me
 
-**After they accept:** *"Thanks for connecting! Quick one: how is your team tracking the 10-working-day investigation deadline at the moment — CRM, spreadsheet, or the property managers' diaries? I've put a free calculator here if it's useful: repairclock.co.uk/tools/deadline-calculator"*
+> Hi **Fiona**, this is my last email. If damp and mould deadlines are already covered at **Lothian & Forth**, great. If not, the free calculator shows any report's deadlines in seconds, and it's yours to use either way: **repairclock.co.uk/tools/deadline-calculator?from=email4**
+>
+> **[Your name]**
 
-### Phone (60-second opener)
-> "Hi, it's [name] from RepairClock — is now a bad time? … I'll be quick. Since the 6th, every damp or mould report has to be investigated in 10 working days, summarised to the tenant in 3 and repairs started in 5. I've built a simple tool that runs those clocks for agents, gets the landlord's approval in one click and writes the letters. Who handles damp and mould reports at [agency]? … How are you tracking the deadlines today? … Would it be worth 15 minutes on Thursday to see it with one of your own cases?"
+After email 4, stop. You can contact non-responders once more in a month with genuinely new news (e.g. England's Phase 2 on 30 November, or a new feature).
 
-Discovery questions: How do reports arrive? Who decides on spend — you or the landlord? What's your approval limit? How do you know a deadline is coming up? What happens when a landlord doesn't reply? Have you had a tribunal case or a complaint about repairs?
+## 5. Answering replies (by email)
 
-Voicemail: *"Hi Fiona, [name] from RepairClock — it's about the new damp and mould deadlines that started on the 6th. I'll send you a short email with a free deadline calculator. Thanks!"*
-
-## 4. Demo strategy (15 minutes, on a video call)
-
-1. **(2 min) Their process.** "Walk me through the last damp report you had." Note: channels, approvals, who writes the letter.
-2. **(2 min) Dashboard** in the demo workspace: overdue, due today, due soon, awaiting landlord. "This is your morning."
-3. **(3 min) Log one of their real reports** live (create their workspace on the call: sign-up → onboarding → new report). The live preview shows their deadlines while you type — the moment it clicks.
-4. **(3 min) Investigation → written summary.** Paste rough surveyor notes; show the drafted summary and the content check; issue it (PDF emailed and filed).
-5. **(2 min) Landlord approval.** Send a link to their own phone; approve it; show it landing on the timeline.
-6. **(1 min) Evidence pack** download.
-7. **(2 min) Close.** "Shall we import the rest of your homes now? Send me your CRM export and I'll do it today." Offer the founding price (below). Book a 10-minute check-in for day 3.
-
-Always end with a concrete next step on the calendar.
-
-## 5. Objections
-
-| Objection | Response |
+| They say | You reply |
 | --- | --- |
-| "We already use Fixflo / Arthur / Alto / Reapit." | "Keep it — RepairClock runs alongside. Those track jobs; they don't count Scottish working days, draft the written summary or the delay notice, or give landlords a deadline-aware approval link. Import your homes from a CSV in a minute." |
-| "A spreadsheet will do." | "Until someone is off sick, or St Andrew's Day falls in the window, or a landlord takes four days to reply. The expensive part isn't the date — it's the delay notice you didn't send in time and the record you can't produce at tribunal." |
-| "It's the landlord's legal duty, not ours." | "Exactly — and the link shows the landlord that. But you're the one they'll blame, and the one the tenant contacted. RepairClock gives you proof you acted on day one." |
-| "We don't get many damp reports." | "That's when deadlines get missed — nobody's in the habit. And winter is coming. It's priced per portfolio, not per case, so quiet months cost nothing extra." |
-| "Price." | "£99 a month for up to 300 homes is less than one hour of a property manager's time per week — and one tribunal application or one lost landlord costs more than a year of it. Founding agencies get it at £79 locked for a year." |
-| "Data protection?" | "UK GDPR: we're your processor, there's a DPA in the terms, data is exportable any time. The optional AI drafting strips names and addresses before anything leaves the server." |
-| "Is this legal advice?" | "No — it runs the process the Regulations and the Scottish Government guidance set out, with sources linked. You stay in control of every letter." |
-| "Let me think about it." | "Sure — start the free trial now (no card) and log the next report that comes in. I'll check in on Thursday." |
+| "How much is it?" | "£99 a month + VAT for up to 300 homes and 5 people (£79 with code FOUNDING20 for the first year). 14-day free trial, no card: [signup link]" |
+| "We already use Fixflo / Arthur / Reapit." | "Keep it. RepairClock runs alongside: those track repair jobs, but they don't count the Scottish working days, draft the written summary and delay notice, or give landlords a deadline-aware approval link. You can import your homes from a CSV export in a minute." |
+| "It's the landlord's duty, not ours." | "It is, and the approval link shows the landlord exactly that. But the tenant told you, so the record of what you did and when protects you too." |
+| "Can you set it up for us?" | "Yes. Email me your property list as a CSV (address, postcode, tenant, landlord name and email) and I'll import it today." |
+| "Is it legal advice?" | "No. It runs the process set out in the Regulations and the Scottish Government's guidance, with the sources linked. You decide what goes in every letter." |
+| "Can we have a call?" | "Of course, though most agents find the demo explains it in two minutes: [demo link]. If you still have questions after that, reply here and I'll answer them." (Offer a call only if they insist.) |
+| "Send more info." | Link the demo and the Scotland guide (repairclock.co.uk/scotland). |
+| "No thanks" / "Remove me" | "Done, sorry to bother you." Add them to the do-not-contact list the same day. |
 
-## 6. Pricing for the first 10
+## 6. Each day
 
-- **Founding agency offer:** Agent plan at **£79/month locked for 12 months** (normally £99), or **£790/year**, for agencies that start before **31 October 2026** — in exchange for a 20-minute feedback call per month and permission to use their name once happy.
-- Implement as a Stripe coupon (e.g. `FOUNDING20`, 20% off for 12 months); promotion codes are already enabled in Checkout.
-- **White-glove setup** included: they send a CSV export; you import homes and landlords for them the same day.
-- Don't discount below £79. Don't offer free months beyond the 14-day trial — offer setup help instead.
+- Morning: check the analytics for new demos, sign-ups and payments (SQL on `analytics_events`, or PostHog).
+- Send the day's emails (new agencies get email 1; earlier ones get their next email).
+- Answer every reply the same day.
+- Look at new sign-ups: if one gets stuck (for example, signed up but no homes), send a two-line personal email offering to import their CSV.
 
-## 7. Follow-up sequence (per prospect)
+## 7. Pricing for the first 10
 
-| Day | Touch |
+- **Code FOUNDING20:** 20% off for 12 months, so the Agent plan is about £79/month. Create it in Stripe as a coupon with a promotion code; checkout already accepts codes. Make it end on 31 October 2026 so there's a reason to act.
+- **Free CSV import**: they email the file, you import it the same day.
+- Don't give extra free months beyond the 14-day trial. Offer the import help instead.
+
+## 8. Targets
+
+| Step | From ~1,000 agencies emailed |
 | --- | --- |
-| 0 | Email 1 + LinkedIn connection request |
-| 2 | Phone call (if number available) → voicemail + calculator link |
-| 3 | Email 2 (landlord approvals) |
-| 5 | LinkedIn message after acceptance |
-| 7 | Email 3 (Christmas deadlines) |
-| 14 | Email 4 (break-up) |
-| 30 | Recycle with news (e.g. "England Phase 2 starts 30 Nov") if no reply |
+| Open the demo or calculator | ~60–100 (6–10%) |
+| Start a trial | ~20–30 |
+| Log a real report (activated) | ~12–18 |
+| Pay | **~5–10** |
 
-Daily rhythm (founder): 25 new prospects researched, 25 first touches, all follow-ups due, 2–3 demos. That's ~1,000 agencies covered in ~6 weeks.
-
-## 8. Conversion: trial → paid
-
-- **Activation** = first real report logged **and** first written summary or approval link issued within 7 days (tracked: `first_case_created`, `summary_issued`, `approval_requested`).
-- Day 0: set up on the demo call; import homes. Day 1: welcome email (automatic). **Day 3:** 10-minute check-in ("did a report come in? let's log it together"). Day 7: share their first evidence pack. **Day 11:** trial-ending reminder (automatic at 3 days left) + personal email with the founding offer. Day 14: call if not converted.
-- Watch the morning digest: if an agency has an overdue case in trial, call them — that's both help and the strongest buying moment.
-- After payment: ask for a referral to one landlord-heavy peer agency and to their damp surveyor.
-
-**Targets:** 100 contacted → 15 replies → 10 demos → 7 trials → 4 paid in week 2–3; repeat to reach 10 paid by day 30.
+All estimates. If after the first 300 emails fewer than 10 people have opened the demo, change the subject line and first sentence before sending more.

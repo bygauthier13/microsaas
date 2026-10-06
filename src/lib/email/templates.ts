@@ -234,3 +234,37 @@ export function teamInviteEmail(opts: { orgName: string; inviterName: string; ur
     text: `${opts.inviterName} invited you to ${opts.orgName} on RepairClock. Accept: ${opts.url} (expires in 7 days)`,
   };
 }
+
+export function firstReportNudgeEmail(opts: { name: string; orgName: string; investigateBy: string }): Rendered {
+  const url = `${env.appUrl}/app/cases/new`;
+  return {
+    subject: "Log your first damp or mould report (30 seconds)",
+    html: layout({
+      preheader: `A report you get today has to be investigated by ${opts.investigateBy}.`,
+      heading: "Put your next report on the clock",
+      body: `<p>Hi ${escapeHtml(opts.name || "there")},</p><p>${escapeHtml(
+        opts.orgName,
+      )}'s workspace is ready, but no reports are logged yet. When the next damp or mould report comes in, log it with the date you heard about it — a report received today has to be investigated by <strong>${escapeHtml(
+        opts.investigateBy,
+      )}</strong>.</p><p>RepairClock then shows every deadline, drafts the tenant's written summary and reminds you each morning.</p>${button(url, "Log a report")}<p style="color:#6b6457;font-size:13px">Just want to look around first? The demo workspace has sample cases at every stage: ${escapeHtml(
+        `${env.appUrl}/demo`,
+      )}</p>`,
+    }),
+    text: `${opts.orgName}'s workspace is ready. A damp or mould report received today must be investigated by ${opts.investigateBy}. Log it here: ${url}`,
+  };
+}
+
+export function importHomesNudgeEmail(opts: { name: string; orgName: string }): Rendered {
+  const url = `${env.appUrl}/app/properties#import`;
+  return {
+    subject: "Add the rest of your homes in a minute",
+    html: layout({
+      preheader: "Export a CSV from your CRM and import it in one go.",
+      heading: "Bring in your whole portfolio",
+      body: `<p>Hi ${escapeHtml(opts.name || "there")},</p><p>So the next report takes seconds to log, add all of ${escapeHtml(
+        opts.orgName,
+      )}'s homes at once: export your property list from your CRM (Reapit, Alto, Arthur, Goodlord…) as a CSV and import it. Landlords are created automatically from a "Landlord name" column.</p>${button(url, "Import homes")}<p style="color:#6b6457;font-size:13px">Stuck? Reply to this email with the file and we'll import it for you.</p>`,
+    }),
+    text: `Import all your homes from a CSV export: ${url} — or reply with the file and we'll do it for you.`,
+  };
+}
