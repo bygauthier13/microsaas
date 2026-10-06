@@ -6,13 +6,13 @@ North star: **paying agencies with an active case in the last 30 days.** Seconda
 
 | # | Action | Done when |
 | --- | --- | --- |
-| 1 | Buy the domain (e.g. repairclock.co.uk), create Google Workspace mailbox, set SPF/DKIM/DMARC | Email from founder@ lands in inbox |
-| 2 | Deploy to Vercel + Neon (EU/UK region); set `APP_URL`, `CRON_SECRET`, `COMPANY_*` | `/api/health` shows postgres + resend + stripe |
-| 3 | Resend: verify domain, set `RESEND_API_KEY`, send yourself a written summary and an approval link | Both arrive, links work |
-| 4 | Stripe: live account, `npm run stripe:setup`, webhook endpoint, `FOUNDING20` coupon | Test-mode then live checkout completes; portal cancels |
+| 1 | Point `repairclock.bygauthier.com` at Vercel (one CNAME); check SPF/DKIM/DMARC on bygauthier.com with Google's Check MX | Site loads on the subdomain; Check MX shows no warnings |
+| 2 | Deploy to Vercel (14-day Pro trial, no card) + Neon (London); set `APP_URL`, `CRON_SECRET`, `COMPANY_*` | `/api/health` shows postgres + resend + stripe |
+| 3 | Resend: verify `repairclock.bygauthier.com`, set `RESEND_API_KEY`, send yourself a written summary and an approval link | Both arrive, links work, replies reach your Gmail |
+| 4 | Stripe: sandbox first, then live account, customer portal, webhook endpoint, `FOUNDING20` coupon | Test-mode then live checkout completes; portal cancels |
 | 5 | Have a solicitor or Propertymark-savvy adviser read the written summary and delay notice templates and the terms/privacy notice | Changes merged |
 | 6 | Build the prospect sheet: 200 agencies from the Scottish Letting Agent Register + Citylets, ranked by fit | 200 rows with decision-maker names |
-| 7 | Start outreach on a separate warmed-up domain: 10 emails/day in week 1, rising to 30–40/day | 50 first emails by Friday |
+| 7 | Start outreach from your bygauthier.com Gmail: 10 emails/day in week 1, rising to 30–40/day | 50 first emails by Friday |
 | 8 | Post on LinkedIn: "A damp report received today must be investigated by Tue 20 Oct — here's how the working days fall" + calculator link | 1 post/day this week |
 | 9 | Submit the calculator and Scotland guide to Google Search Console; request indexing | Indexed |
 

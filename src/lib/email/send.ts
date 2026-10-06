@@ -2,6 +2,9 @@
  * Outbound email. Uses Resend when RESEND_API_KEY is set; otherwise (and always for demo
  * workspaces) messages are written to the `outbox_emails` table and viewable in-app at
  * /app/outbox, so every flow can be exercised locally without an email provider.
+ *
+ * Replies go to `replyTo` when given, otherwise to SUPPORT_EMAIL: the From address can be a
+ * sending-only address (e.g. notifications@ on a subdomain) with no mailbox behind it.
  */
 import { Resend } from "resend";
 import { getDb } from "@/lib/db";
@@ -46,7 +49,7 @@ export async function sendEmail(input: EmailInput): Promise<EmailResult> {
         subject: input.subject,
         html: input.html,
         text: input.text,
-        replyTo: input.replyTo ?? undefined,
+        replyTo: input.replyTo || env.company.email,
         attachments: input.attachments?.map((a) => ({
           filename: a.filename,
           content: a.content,

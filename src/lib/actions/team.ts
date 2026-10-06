@@ -57,7 +57,7 @@ export async function inviteMemberAction(_prev: ActionState, fd: FormData): Prom
       expiresAt: new Date(Date.now() + 7 * 86_400_000),
     });
     const url = `${env.appUrl}/invite/${encodeURIComponent(token)}`;
-    const res = await sendEmail({ to: email, ...teamInviteEmail({ orgName: org.name, inviterName: user.name || user.email, url }), category: "team_invite", orgId: org.id });
+    const res = await sendEmail({ to: email, ...teamInviteEmail({ orgName: org.name, inviterName: user.name || user.email, url }), category: "team_invite", orgId: org.id, replyTo: user.email });
     await track("member_invited", { orgId: org.id, userId: user.id });
     revalidatePath("/app/settings");
     return {

@@ -52,8 +52,9 @@ Keep a sheet: `Agency · Company type (Ltd/LLP/partnership/sole trader) · City 
 - This is a summary, not legal advice; the ICO's guidance on business-to-business marketing has the detail.
 
 **So your emails land in the inbox, not spam:**
-- Use a **separate domain** for outreach (e.g. `tryrepairclock.co.uk`, about £10/year) so a spam complaint can never hurt the domain your product emails come from.
-- Create a mailbox on it (Zoho Mail's free plan or Google Workspace) and set up SPF, DKIM and DMARC.
+- **Start free from your existing Gmail (Google Workspace) address at bygauthier.com.** Check SPF, DKIM and DMARC first with Google's Check MX tool, and switch DKIM on in the Google Admin console if it's off (the launch checklist has the steps).
+- The trade-off: if recipients mark your emails as spam, it can hurt delivery of all your bygauthier.com email. Keep every email relevant and honour opt-outs at once. Once you have a paying customer, consider moving outreach to a separate domain (about £5/year) with its own mailbox.
+- Product emails (letters, reminders) already go from `repairclock.bygauthier.com` through Resend, so they're kept apart from your Gmail.
 - Ramp up slowly: **10 a day in week 1, 20 a day in week 2, then 30–40 a day**. Send by hand from the mailbox or with a simple mail-merge. You don't need a paid cold-email tool at this volume.
 - Plain text, one link, no images, no attachments. Personalise the first line.
 
@@ -70,7 +71,7 @@ Each email has to work on its own: someone who reads only that one should unders
 >
 > I built RepairClock for letting agents. You log the report and it counts every deadline (Scottish bank holidays included), gets the landlord's approval with one link, writes the tenant's letters and keeps a record you could show a tribunal.
 >
-> There's a sample agency you can click around, no sign-up: **repairclock.co.uk/demo?from=email1**
+> There's a sample agency you can click around, no sign-up: **repairclock.bygauthier.com/demo?from=email1**
 >
 > **[Your name]**, RepairClock
 > Reply "no thanks" and I won't email again.
@@ -84,7 +85,7 @@ Each email has to work on its own: someone who reads only that one should unders
 >
 > In RepairClock the landlord gets a link showing the work, the cost and the legal deadline. They approve or decline with one tap, no login, and their answer is saved on the case with the date and time. Reminders go out automatically until they answer.
 >
-> You can try it on the "Dalmeny Street" case in the demo: **repairclock.co.uk/demo?from=email2**
+> You can try it on the "Dalmeny Street" case in the demo: **repairclock.bygauthier.com/demo?from=email2**
 >
 > **[Your name]**
 > Reply "no thanks" and I won't email again.
@@ -98,7 +99,7 @@ Each email has to work on its own: someone who reads only that one should unders
 >
 > RepairClock emails your team every weekday morning with anything overdue, due today or due in the next 2 working days, across every home you manage.
 >
-> Free 14-day trial, no card: **repairclock.co.uk/signup?from=email3**. Use code **FOUNDING20** at checkout for 20% off for your first year (offer ends 31 October).
+> Free 14-day trial, no card: **repairclock.bygauthier.com/signup?from=email3**. Use code **FOUNDING20** at checkout for 20% off for your first year (offer ends 31 October).
 >
 > **[Your name]**
 > Reply "no thanks" and I won't email again.
@@ -106,7 +107,7 @@ Each email has to work on its own: someone who reads only that one should unders
 ### Email 4 — Day 16 (last)
 **Subject:** Last one from me
 
-> Hi **Fiona**, this is my last email. If damp and mould deadlines are already covered at **Lothian & Forth**, great. If not, the free calculator shows any report's deadlines in seconds, and it's yours to use either way: **repairclock.co.uk/tools/deadline-calculator?from=email4**
+> Hi **Fiona**, this is my last email. If damp and mould deadlines are already covered at **Lothian & Forth**, great. If not, the free calculator shows any report's deadlines in seconds, and it's yours to use either way: **repairclock.bygauthier.com/tools/deadline-calculator?from=email4**
 >
 > **[Your name]**
 
@@ -122,7 +123,7 @@ After email 4, stop. You can contact non-responders once more in a month with ge
 | "Can you set it up for us?" | "Yes. Email me your property list as a CSV (address, postcode, tenant, landlord name and email) and I'll import it today." |
 | "Is it legal advice?" | "No. It runs the process set out in the Regulations and the Scottish Government's guidance, with the sources linked. You decide what goes in every letter." |
 | "Can we have a call?" | "Of course, though most agents find the demo explains it in two minutes: [demo link]. If you still have questions after that, reply here and I'll answer them." (Offer a call only if they insist.) |
-| "Send more info." | Link the demo and the Scotland guide (repairclock.co.uk/scotland). |
+| "Send more info." | Link the demo and the Scotland guide (repairclock.bygauthier.com/scotland). |
 | "No thanks" / "Remove me" | "Done, sorry to bother you." Add them to the do-not-contact list the same day. |
 
 ## 6. Each day

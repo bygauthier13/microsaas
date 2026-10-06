@@ -89,14 +89,14 @@ The embedded database is single-process: stop `next dev` before running a CLI sc
 
 ## Deployment (Vercel + Neon)
 
-1. **Vercel**: sign in with GitHub → *Add New → Project* → import this repo (Next.js is detected; no build settings to change).
+1. **Vercel**: sign up with GitHub and start the free 14-day **Pro trial** (no card) → *Add New → Project* → import this repo (Next.js is detected; no build settings to change).
 2. **Database**: in the Vercel project → *Storage* → create a **Neon** Postgres database (London, `aws-eu-west-2`) and connect it to the project — this adds `DATABASE_URL`. `vercel.json` pins the functions to London (`lhr1`) so they sit next to the database. Migrations run automatically on the first request; open `/api/health` once after the first deploy.
 3. **Environment variables** (*Settings → Environment Variables*): `CRON_SECRET` (any long random string), `COMPANY_NAME`, `COMPANY_NUMBER` (limited companies only), `COMPANY_ADDRESS`, `SUPPORT_EMAIL` (shown on every page and used as the reply-to address, so it must be an inbox you read), then the Stripe and Resend keys below. `APP_URL` is optional on Vercel (it defaults to the project's production domain); set it once you add a custom domain. Redeploy after changing variables.
-4. **Email**: add your domain in Resend, add the DNS records it shows, then set `RESEND_API_KEY` and `EMAIL_FROM` (an address on that domain).
+4. **Email**: add your domain (or a subdomain such as `repairclock.bygauthier.com`) in Resend, add the DNS records it shows, then set `RESEND_API_KEY` and `EMAIL_FROM` (an address on that domain; it can be sending-only, because replies go to `SUPPORT_EMAIL` unless an email sets its own reply-to).
 5. **Stripe** (below).
 6. Open `/api/health`: it lists, in plain words, what is set up and what is missing (never secret values).
 
-`vercel.json` schedules `/api/cron/daily` once a day (allowed on the free plan); Vercel sends `CRON_SECRET` as a Bearer token. The free Hobby plan is for non-commercial use — upgrade the project to Pro before taking payments.
+`vercel.json` schedules `/api/cron/daily` once a day; Vercel sends `CRON_SECRET` as a Bearer token. The free Hobby plan is for non-commercial use, so create the project inside the Pro trial rather than moving it there later (a transfer needs a card, which ends the trial).
 
 Until `STRIPE_SECRET_KEY` is set, a production deployment refuses plan purchases and the billing page says card payments open soon (trials carry on). Simulated billing is for local development, or staging with `ALLOW_SIMULATED_BILLING=true`.
 
@@ -110,16 +110,16 @@ Nothing has to be paid up front. Prices checked October 2026; check current pric
 
 | Item | Cost | Notes |
 | --- | --- | --- |
-| Product domain (.co.uk) | ~£10/year | |
-| Separate outreach domain + mailbox | ~£10/year + £0 | Zoho Mail free plan (custom domain, web/mobile only) or Google Workspace (~£7/user/month) |
-| Hosting (Vercel) | £0 while testing → ~$20/month (Pro) | The free Hobby plan is for non-commercial use only; move to Pro before taking payments |
+| Product domain | £0 on a subdomain you already own (e.g. `repairclock.bygauthier.com`), or ~£5–£10/year for a new .co.uk | A subdomain needs one CNAME record |
+| Outreach mailbox | £0 from an existing Google Workspace address at low volume | Later: a separate domain (~£5/year) keeps spam complaints away from your main domain |
+| Hosting (Vercel) | £0 for the 14-day Pro trial (no card) → ~$20/month | The free Hobby plan is for non-commercial use only, which rules out a site that sells. Start the project in the Pro trial: a project can't move into a trial team without adding a card, which ends the trial |
 | Database (Neon) | £0 | Free plan: 0.5 GB per project; photos are stored in the database, so this is the first limit you hit (paid plans bill storage at ~$0.35/GB-month) |
 | Email (Resend) | £0 | Free plan: 3,000 emails/month, 100/day, one domain |
 | Payments (Stripe) | No monthly fee | UK cards ~1.5% + 20p per payment, plus 0.7% for subscription billing |
 | AI drafting (Anthropic) | Optional, pay per use | The app works fully without it |
 | ICO data protection fee | £52/year | Most UK businesses handling personal data must pay it; check the ICO's self-assessment |
 
-Roughly **£20 to start and ~£20–£40/month once you charge customers**, covered by the first subscription.
+Roughly **£0 to start** (on a subdomain you already own, inside the Vercel Pro trial), then **~$20/month** once the trial ends, plus the ICO fee if its self-assessment says you need it. One Agent subscription covers it several times over.
 
 ## Stripe setup (test mode)
 
