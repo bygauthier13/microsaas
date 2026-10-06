@@ -5,15 +5,16 @@
  */
 
 function str(name: string): string | undefined {
-  const v = process.env[name];
-  if (!v || v === "replace_me" || v.startsWith("replace_me")) return undefined;
+  // Values pasted into a hosting dashboard often carry stray spaces or the quotes from a .env file.
+  const v = process.env[name]?.trim().replace(/^"(.*)"$/, "$1").trim();
+  if (!v || v.startsWith("replace_me")) return undefined;
   return v;
 }
 
 export const env = {
   get appUrl(): string {
     const explicit = str("APP_URL");
-    if (explicit) return explicit.replace(/\/$/, "");
+    if (explicit) return (/^https?:\/\//.test(explicit) ? explicit : `https://${explicit}`).replace(/\/+$/, "");
     // On Vercel, fall back to the project's production domain (a system env var).
     const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL;
     if (vercel) return `https://${vercel.replace(/\/$/, "")}`;
