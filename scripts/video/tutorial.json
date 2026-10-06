@@ -1,0 +1,51 @@
+[
+  {"id": "intro", "step": 0, "title": "Get started in 8 steps", "lines": [
+    {"say": "[cheerfully] Hi! Let me show you how to get started with RepairClock, step by step.", "cap": "Hi! Let me show you how to get started with RepairClock, step by step."},
+    {"say": "It only takes a few minutes, and you can follow along as you watch.", "cap": "It only takes a few minutes, and you can follow along as you watch."}
+  ]},
+  {"id": "s1", "step": 1, "title": "Create your free account", "lines": [
+    {"say": "[cheerfully] Step one: create your free account.", "cap": "Step 1: create your free account."},
+    {"say": "Click 'Start free trial', then type your name, your work email and a password.", "cap": "Click “Start free trial”, then type your name, your work email and a password."},
+    {"say": "There's no card needed, and the first fourteen days are free.", "cap": "There’s no card needed, and the first 14 days are free."}
+  ]},
+  {"id": "s2", "step": 2, "title": "Set up your agency", "lines": [
+    {"say": "[cheerfully] Step two: set up your agency.", "cap": "Step 2: set up your agency."},
+    {"say": "Choose 'Letting agent' and 'Scotland', then add your agency's name and phone number.", "cap": "Choose “Letting agent” and “Scotland”, then add your agency’s name and phone number."},
+    {"say": "They'll appear on the letters your tenants receive.", "cap": "They’ll appear on the letters your tenants receive."}
+  ]},
+  {"id": "s3", "step": 3, "title": "Add your homes", "lines": [
+    {"say": "[cheerfully] Step three: add your homes.", "cap": "Step 3: add your homes."},
+    {"say": "Open 'Homes', and upload a spreadsheet from your property software, or add them one by one.", "cap": "Open “Homes”, and upload a spreadsheet from your property software, or add them one by one."},
+    {"say": "There's a template to download, if you need one.", "cap": "There’s a template to download, if you need one."}
+  ]},
+  {"id": "s4", "step": 4, "title": "Log a damp or mould report", "lines": [
+    {"say": "[cheerfully] Step four: when a tenant reports damp or mould, click 'Log a report'.", "cap": "Step 4: when a tenant reports damp or mould, click “Log a report”."},
+    {"say": "Pick the home, describe the problem, and say when you found out.", "cap": "Pick the home, describe the problem, and say when you found out."},
+    {"say": "RepairClock works out every legal deadline for you, skipping weekends and bank holidays.", "cap": "RepairClock works out every legal deadline for you, skipping weekends and bank holidays."}
+  ]},
+  {"id": "s5", "step": 5, "title": "Get the landlord’s approval", "lines": [
+    {"say": "[cheerfully] Step five: need the landlord to approve a repair?", "cap": "Step 5: need the landlord to approve a repair?"},
+    {"say": "Open the case, add the work and the price, and send them a link.", "cap": "Open the case, add the work and the price, and send them a link."},
+    {"say": "They approve in seconds, with no login, and their answer is saved on the case.", "cap": "They approve in seconds, with no login, and their answer is saved on the case."}
+  ]},
+  {"id": "s6", "step": 6, "title": "Send the written summary", "lines": [
+    {"say": "[cheerfully] Step six: after the visit, record what was found.", "cap": "Step 6: after the visit, record what was found."},
+    {"say": "RepairClock drafts the tenant's written summary for you.", "cap": "RepairClock drafts the tenant’s written summary for you."},
+    {"say": "Check it, click 'Issue written summary', and it's emailed in your agency's name.", "cap": "Check it, click “Issue written summary”, and it’s emailed in your agency’s name."}
+  ]},
+  {"id": "s7", "step": 7, "title": "Invite your team", "lines": [
+    {"say": "[cheerfully] Step seven: invite your team.", "cap": "Step 7: invite your team."},
+    {"say": "In 'Settings', type a colleague's email, and click 'Send invitation'.", "cap": "In “Settings”, type a colleague’s email, and click “Send invitation”."},
+    {"say": "Everyone gets their own login.", "cap": "Everyone gets their own login."}
+  ]},
+  {"id": "s8", "step": 8, "title": "Choose your plan", "lines": [
+    {"say": "[cheerfully] Step eight: pick your plan, whenever you're ready.", "cap": "Step 8: pick your plan, whenever you’re ready."},
+    {"say": "Open 'Plan and billing'. Most agencies choose 'Agent': up to three hundred homes and five people, for ninety-nine pounds a month, plus VAT.", "cap": "Open “Plan & billing”. Most agencies choose “Agent”: up to 300 homes and 5 people, for £99 a month + VAT."},
+    {"say": "You can switch or cancel at any time.", "cap": "You can switch or cancel at any time."}
+  ]},
+  {"id": "outro", "step": 9, "title": "You’re all set", "lines": [
+    {"say": "[cheerfully] And that's it, you're all set!", "cap": "And that’s it, you’re all set!"},
+    {"say": "Each morning, your 'Today' page shows what's due, and your team gets a reminder email.", "cap": "Each morning, your “Today” page shows what’s due, and your team gets a reminder email."},
+    {"say": "Start your free trial today. The link's on your screen. See you inside!", "cap": "Start your free trial today. The link’s on your screen. See you inside!"}
+  ]}
+]

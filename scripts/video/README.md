@@ -29,3 +29,41 @@ python3 scripts/video/mux.py "$WORK"                                 # → Repai
 
 Edit `narration.json` to change what is said (each caption is one voice line); the scene
 actions are in `record.mjs`. Other British voices: `bm_george`, `bf_isabella`, `bm_fable`.
+
+## Step-by-step tutorial
+
+Builds `RepairClock-tutorial.mp4` (about 2¼ minutes, 1280×720): a brand-new agency goes through the
+8 steps — sign up, agency details, import homes, log a report, landlord approval, investigation and
+written summary, invite a colleague, choose a plan — with a step banner, "Click …" tips and captions.
+The voice is Eleanor (ElevenLabs Eleven v3, generated through Runway's text-to-speech).
+
+- `tutorial.json`: what is said (`say`, with delivery tags such as `[cheerfully]`) and the caption
+  for each sentence. One voice clip per entry.
+- `tutorial-homes.csv`: the spreadsheet imported in step 3.
+- `tutorial.mjs`: the recorder. It captures the browser's own frames at a steady 25 fps
+  (Playwright's built-in recorder stretches the video while animations run) and cuts out waits
+  for the server once the voice has finished.
+- `lines.py`: splits each clip into its sentences at the pauses, so each caption and action
+  starts with its sentence.
+
+With the app built (`npm run build`) and `WORK` an empty folder outside the repo:
+
+1. For each entry in `tutorial.json`, join its `say` lines with spaces and generate the speech
+   (model `eleven_v3`, voice `Eleanor`, language `en`, seed `4217`). Save the clips as
+   `$WORK/audio/<id>.mp3` and their lengths in `$WORK/voice.json`, e.g. `{"intro": {"seconds": 8.48}, …}`.
+2. Start the app on an empty database (the recorder signs up `fiona@lothianforth.example.com`):
+
+   ```bash
+   PGLITE_DIR=$(mktemp -d) APP_URL=http://localhost:3600 SUPPORT_EMAIL=hello@bygauthier.com npx next start -p 3600
+   ```
+
+3. Then:
+
+   ```bash
+   python3 scripts/video/lines.py "$WORK"                                # sentence timings → audio/lines.json
+   node scripts/video/tutorial.mjs "$WORK"                               # walkthrough → raw/
+   python3 scripts/video/mux.py "$WORK" "$WORK/RepairClock-tutorial.mp4" # + voice → final video
+   ```
+
+Without the clips in `audio/`, `lines.py` estimates the sentence timings from `voice.json` and
+`mux.py` makes a silent preview, which is enough to check the visuals.

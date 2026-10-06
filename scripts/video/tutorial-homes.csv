@@ -1,0 +1,7 @@
+Address,Address line 2,Town,Postcode,Nation,Sector,Tenant name,Tenant email,Tenant phone,Landlord name,Landlord email
+"Flat 2/1, 14 Dalmeny Street",,Edinburgh,EH6 8PG,Scotland,Private,Jamie Reid,jamie.reid@example.com,07700 900123,Morag Campbell,morag.campbell@example.com
+"3 Rosebank Terrace",,Aberdeen,AB11 6LQ,Scotland,Private,Priya Shah,priya.shah@example.com,07700 900456,Northfield Property Holdings Ltd,accounts@northfield.example.com
+"Flat 1F2, 27 Easter Road",,Edinburgh,EH7 5PS,Scotland,Private,Callum Fraser,callum.fraser@example.com,,Northfield Property Holdings Ltd,accounts@northfield.example.com
+"12 Marchmont Crescent",,Edinburgh,EH9 1HN,Scotland,Private,Ellie Douglas,ellie.douglas@example.com,,Dr Arjun Rao,arjun.rao@example.com
+"Flat 0/2, 8 Gardner Street",,Glasgow,G11 5NJ,Scotland,Private,Tom Baird,tom.baird@example.com,07700 900789,Morag Campbell,morag.campbell@example.com
+"5 Pitt Street",,Edinburgh,EH6 4BY,Scotland,Private,Hannah Wilson,hannah.wilson@example.com,,Dr Arjun Rao,arjun.rao@example.com
