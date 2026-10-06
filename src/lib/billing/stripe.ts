@@ -30,7 +30,17 @@ export function priceIdFor(plan: PaidPlanId, interval: "month" | "year"): string
 }
 
 async function ensureCustomer(org: Org, email: string): Promise<string> {
-  if (org.stripeCustomerId) return org.stripeCustomerId;
+  if (org.stripeCustomerId) {
+    // A customer made with test keys doesn't exist once live keys are in place (or it was
+    // deleted in the dashboard): create a fresh one instead of failing checkout.
+    const existing = await stripe()
+      .customers.retrieve(org.stripeCustomerId)
+      .catch((err: unknown) => {
+        if (err instanceof Stripe.errors.StripeInvalidRequestError && err.code === "resource_missing") return null;
+        throw err;
+      });
+    if (existing && !existing.deleted) return existing.id;
+  }
   const customer = await stripe().customers.create({
     email,
     name: org.name,
