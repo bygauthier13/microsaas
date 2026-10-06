@@ -45,6 +45,8 @@ export async function onboardingAction(_prev: ActionState, fd: FormData): Promis
   } catch (err) {
     return toState(err);
   }
+  // The app layout was first drawn without a workspace (no menu); redraw it with the new one.
+  revalidatePath("/app", "layout");
   redirect("/app/cases/new?first=1");
 }
 

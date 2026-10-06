@@ -30,5 +30,9 @@ export async function signUpAndOnboard(page: Page, opts: { email?: string; kind?
   await page.getByRole("button", { name: /continue/i }).click();
   await page.waitForURL("**/app/cases/new?first=1");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("first");
+  if ((page.viewportSize()?.width ?? 0) >= 1024) {
+    // The sidebar menu shows up straight away, without reloading the page.
+    await expect(page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Homes" })).toBeVisible();
+  }
   return email;
 }
