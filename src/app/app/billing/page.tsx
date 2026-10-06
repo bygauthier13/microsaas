@@ -11,7 +11,7 @@ import { syncFromCheckoutSession } from "@/lib/billing/stripe";
 import { getDb } from "@/lib/db";
 import { organizations } from "@/lib/db/schema";
 import { env } from "@/lib/env";
-import { activeHomes, seatsInUse } from "@/lib/org";
+import { homesInUse, seatsInUse } from "@/lib/org";
 import { formatInstant } from "@/lib/rules/calendar";
 
 export const metadata = { title: "Plan & billing" };
@@ -41,7 +41,7 @@ export default async function BillingPage({ searchParams }: PageProps<"/app/bill
     }
   }
   const access = orgAccess(org);
-  const [homes, seats] = await Promise.all([activeHomes(org.id), seatsInUse(org.id)]);
+  const [homes, seats] = await Promise.all([homesInUse(org.id), seatsInUse(org.id)]);
   const interval = sp.interval === "year" ? "year" : "month";
   const recommended = recommendedPlan(homes, org.kind);
   const current = isPaidPlan(org.plan) && access.state !== "canceled" ? org.plan : null;

@@ -1,6 +1,6 @@
-import { and, count, eq, gt, isNull, sql } from "drizzle-orm";
+import { and, count, eq, exists, gt, isNull, or, sql } from "drizzle-orm";
 import { getDb } from "@/lib/db";
-import { invitations, memberships, organizations, properties, type OrgKind, type OrgSettings } from "@/lib/db/schema";
+import { cases, invitations, memberships, organizations, properties, type OrgKind, type OrgSettings } from "@/lib/db/schema";
 import { orgAccess, TRIAL_DAYS } from "@/lib/billing/plans";
 
 export async function createOrganization(input: {
@@ -32,19 +32,29 @@ export async function createOrganization(input: {
   return org;
 }
 
-export async function activeHomes(orgId: string): Promise<number> {
+/**
+ * Homes that count towards the plan: every active home, plus archived homes with a report logged
+ * in the last 12 months. Otherwise a large portfolio could sit on a small plan by adding each
+ * home when a report comes in and archiving it once the report is closed.
+ */
+export async function homesInUse(orgId: string, now = new Date()): Promise<number> {
   const db = await getDb();
+  const since = new Date(now.getTime() - 365 * 86_400_000);
+  const recentReport = db
+    .select({ id: cases.id })
+    .from(cases)
+    .where(and(eq(cases.propertyId, properties.id), gt(cases.createdAt, since)));
   const [row] = await db
     .select({ n: count() })
     .from(properties)
-    .where(and(eq(properties.orgId, orgId), isNull(properties.archivedAt)));
+    .where(and(eq(properties.orgId, orgId), or(isNull(properties.archivedAt), exists(recentReport))));
   return Number(row?.n ?? 0);
 }
 
 /** Can this organisation add `extra` more homes under its plan? */
 export async function homesHeadroom(org: typeof organizations.$inferSelect, extra = 1) {
   const access = orgAccess(org);
-  const current = await activeHomes(org.id);
+  const current = await homesInUse(org.id);
   return { ok: access.canCreate && current + extra <= access.homesLimit, current, limit: access.homesLimit, access };
 }
 

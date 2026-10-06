@@ -1,13 +1,13 @@
 "use server";
 
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, isNull, ne } from "drizzle-orm";
 import Papa from "papaparse";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { track } from "@/lib/analytics";
 import { requireOrg, requireUser } from "@/lib/auth/session";
 import { getDb } from "@/lib/db";
-import { landlords, organizations, properties, type OrgKind } from "@/lib/db/schema";
+import { cases, landlords, organizations, properties, type OrgKind } from "@/lib/db/schema";
 import { sendEmail } from "@/lib/email/send";
 import { welcomeEmail } from "@/lib/email/templates";
 import { env } from "@/lib/env";
@@ -191,10 +191,17 @@ export async function savePropertyAction(_prev: ActionState, fd: FormData): Prom
 export async function archivePropertyAction(fd: FormData): Promise<void> {
   const { org } = await requireOrg();
   const db = await getDb();
+  const propertyId = str(fd, "propertyId", 64);
+  const [openCase] = await db
+    .select({ id: cases.id })
+    .from(cases)
+    .where(and(eq(cases.orgId, org.id), eq(cases.propertyId, propertyId), ne(cases.status, "closed")))
+    .limit(1);
+  if (openCase) redirect("/app/properties?error=open_case");
   await db
     .update(properties)
     .set({ archivedAt: new Date() })
-    .where(and(eq(properties.orgId, org.id), eq(properties.id, str(fd, "propertyId", 64)), isNull(properties.archivedAt)));
+    .where(and(eq(properties.orgId, org.id), eq(properties.id, propertyId), isNull(properties.archivedAt)));
   revalidatePath("/app/properties");
 }
 

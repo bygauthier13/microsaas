@@ -24,7 +24,7 @@ export default function TermsPage() {
         <ul>
           <li>New workspaces get a free trial. No card is required to start.</li>
           <li>Paid plans are billed monthly or annually in advance through Stripe. Prices exclude VAT.</li>
-          <li>Plan limits (homes, team members) are shown on the pricing page. Each login is for one named person: don&apos;t share logins. We may suspend shared logins after telling you.</li>
+          <li>Plan limits (homes, team members) are shown on the pricing page. Archived homes that had a report in the last 12 months count towards the home limit. Each login is for one named person: don&apos;t share logins. We may suspend shared logins after telling you.</li>
           <li>You can cancel at any time; cancellation takes effect at the end of the paid period. We don&apos;t refund partial periods except where the law requires.</li>
         </ul>
         <h2>3. Your data</h2>

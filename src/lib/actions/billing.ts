@@ -9,7 +9,7 @@ import { createCheckoutUrl, createPortalUrl } from "@/lib/billing/stripe";
 import { getDb } from "@/lib/db";
 import { organizations } from "@/lib/db/schema";
 import { env } from "@/lib/env";
-import { activeHomes, seatsInUse } from "@/lib/org";
+import { homesInUse, seatsInUse } from "@/lib/org";
 import { str } from "./helpers";
 
 async function ownerOrg() {
@@ -26,7 +26,7 @@ export async function startCheckoutAction(fd: FormData): Promise<void> {
   if (!isPaidPlan(plan)) redirect("/app/billing?error=plan");
   // A plan smaller than the workspace (e.g. 300 homes imported during the trial, then the
   // 10-home plan) would leave everything usable for the lowest price.
-  const [homes, seats] = await Promise.all([activeHomes(org.id), seatsInUse(org.id)]);
+  const [homes, seats] = await Promise.all([homesInUse(org.id), seatsInUse(org.id)]);
   if (planMisfit(plan, { homes, seats })) redirect("/app/billing?error=too_small");
   await track("checkout_started", { orgId: org.id, userId: user.id, props: { plan, interval, mode: env.billingMode } });
 

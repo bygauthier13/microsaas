@@ -3,13 +3,14 @@ import { and, asc, count, eq, isNull, ne } from "drizzle-orm";
 import { Archive, Building2, FileSpreadsheet, Pencil, Plus } from "lucide-react";
 import { ActionForm } from "@/components/case/action-form";
 import { PropertyForm } from "@/components/forms/property-form";
-import { Badge, Card, EmptyState, Field, PageHeader } from "@/components/ui";
+import { Alert, Badge, Card, EmptyState, Field, PageHeader } from "@/components/ui";
 import { SubmitButton } from "@/components/submit-button";
 import { archivePropertyAction, importPropertiesAction } from "@/lib/actions/org";
 import { requireOrg } from "@/lib/auth/session";
 import { orgAccess } from "@/lib/billing/plans";
 import { getDb } from "@/lib/db";
 import { cases, landlords, properties } from "@/lib/db/schema";
+import { homesInUse } from "@/lib/org";
 
 export const metadata = { title: "Homes" };
 
@@ -17,7 +18,7 @@ export default async function PropertiesPage({ searchParams }: PageProps<"/app/p
   const { org } = await requireOrg();
   const sp = await searchParams;
   const db = await getDb();
-  const [homes, lls, openCounts] = await Promise.all([
+  const [homes, lls, openCounts, inUse] = await Promise.all([
     db
       .select({ property: properties, landlordName: landlords.name })
       .from(properties)
@@ -30,6 +31,7 @@ export default async function PropertiesPage({ searchParams }: PageProps<"/app/p
       .from(cases)
       .where(and(eq(cases.orgId, org.id), ne(cases.status, "closed")))
       .groupBy(cases.propertyId),
+    homesInUse(org.id),
   ]);
   const open = new Map(openCounts.map((r) => [r.propertyId, Number(r.n)]));
   const access = orgAccess(org);
@@ -42,13 +44,19 @@ export default async function PropertiesPage({ searchParams }: PageProps<"/app/p
     <div className="space-y-6">
       <PageHeader
         title="Homes"
-        description={`${homes.length} of ${access.homesLimit.toLocaleString("en-GB")} homes on your ${access.planName.toLowerCase()}.`}
+        description={`${inUse} of ${access.homesLimit.toLocaleString("en-GB")} homes used on your ${access.planName.toLowerCase()}${
+          inUse > homes.length ? ", including archived homes with a report in the last 12 months" : ""
+        }.`}
         actions={
           <a href="#add" className="inline-flex h-10 items-center gap-2 rounded-lg bg-ink px-4 text-[0.95rem] font-medium text-white hover:bg-ink-2">
             <Plus className="h-4 w-4" aria-hidden /> Add a home
           </a>
         }
       />
+
+      {sp.error === "open_case" ? (
+        <Alert tone="bad">This home has an open report. Close the report before archiving the home, so its deadlines stay in view.</Alert>
+      ) : null}
 
       {editing ? (
         <Card className="p-5 sm:p-6">
@@ -104,7 +112,13 @@ export default async function PropertiesPage({ searchParams }: PageProps<"/app/p
                   </Link>
                   <form action={archivePropertyAction}>
                     <input type="hidden" name="propertyId" value={p.id} />
-                    <button type="submit" className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink" aria-label={`Archive ${p.addressLine1}`} title="Archive (keeps its case history)">
+                    <button
+                      type="submit"
+                      disabled={(open.get(p.id) ?? 0) > 0}
+                      className="rounded-md p-1.5 text-muted hover:bg-paper-2 hover:text-ink disabled:cursor-not-allowed disabled:opacity-40"
+                      aria-label={`Archive ${p.addressLine1}`}
+                      title={(open.get(p.id) ?? 0) > 0 ? "Close its open report before archiving" : "Archive (keeps its case history)"}
+                    >
                       <Archive className="h-4 w-4" />
                     </button>
                   </form>

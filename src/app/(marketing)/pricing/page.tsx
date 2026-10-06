@@ -13,7 +13,7 @@ export const metadata = {
 };
 
 const FAQ = [
-  ["What counts as a home?", "Each active property in your workspace. Archived homes don't count, and their case history is kept."],
+  ["What counts as a home?", "Each active property in your workspace, plus any archived property that had a report in the last 12 months. Archived homes keep their full case history."],
   ["Do I need a card for the trial?", `No. You get ${TRIAL_DAYS} days with up to 300 homes. When it ends, your cases stay readable and exportable; choose a plan to keep logging new reports.`],
   ["Do prices include VAT?", "Prices exclude VAT, which is added at checkout where applicable. You can add your VAT number in checkout."],
   ["Can I change plan or cancel?", "Yes — upgrade, downgrade or cancel from the billing page at any time. Changes are prorated; cancellation takes effect at the end of the period you've paid for."],
