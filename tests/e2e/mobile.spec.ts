@@ -27,6 +27,7 @@ test("@mobile marketing and app are usable on a phone", async ({ page }) => {
   await noHorizontalScroll(page);
   await expect(page.getByText("What's due")).toBeVisible();
   await page.getByRole("button", { name: "Open menu" }).click();
+  await expect(page.getByRole("button", { name: "Watch the 2-minute setup guide" })).toBeVisible();
   await page.getByRole("link", { name: "Cases", exact: true }).click();
   await page.waitForURL("**/app/cases");
   await noHorizontalScroll(page);

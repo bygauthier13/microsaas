@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LogOut } from "lucide-react";
+import { LogOut, PlayCircle } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { NavLinks } from "@/components/app/nav";
 import { MobileNav } from "@/components/app/mobile-nav";
@@ -32,10 +32,18 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         ) : null}
         <div className="mt-auto space-y-3 px-2">
           {access && access.state === "trial" ? (
-            <Link href="/app/billing" className="block rounded-lg border border-line bg-surface px-3 py-2.5 text-xs leading-relaxed hover:border-line-strong">
-              <span className="font-semibold text-ink">Free trial · {access.trialDaysLeft} day{access.trialDaysLeft === 1 ? "" : "s"} left</span>
-              <span className="block text-muted">Choose a plan any time →</span>
-            </Link>
+            <div className="rounded-lg border border-line bg-surface text-xs leading-relaxed">
+              <Link href="/app/billing" className="block rounded-lg px-3 py-2.5 hover:bg-paper">
+                <span className="font-semibold text-ink">Free trial · {access.trialDaysLeft} day{access.trialDaysLeft === 1 ? "" : "s"} left</span>
+                <span className="block text-muted">Choose a plan any time →</span>
+              </Link>
+              {/* The demo shows the guide in its banner instead. */}
+              {org?.isDemo ? null : (
+                <GuideVideoButton className="flex w-full items-center gap-1.5 rounded-b-lg border-t border-line px-3 py-2 text-left font-medium text-signal-strong hover:bg-paper">
+                  <PlayCircle className="h-3.5 w-3.5 shrink-0" aria-hidden /> Watch the 2-minute setup guide
+                </GuideVideoButton>
+              )}
+            </div>
           ) : null}
           <div className="flex items-center justify-between gap-2 border-t border-line pt-3">
             <div className="min-w-0">
@@ -60,7 +68,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
                 Sign out
               </button>
             </form>
-            {org ? <MobileNav hideLandlords={hideLandlords} /> : null}
+            {org ? <MobileNav hideLandlords={hideLandlords} showGuide={access?.state === "trial" && !org.isDemo} /> : null}
           </div>
         </header>
 

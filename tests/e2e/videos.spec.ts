@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { signUpAndOnboard } from "./helpers";
 
 const GUIDE = "Set up RepairClock in 8 steps";
 
@@ -40,4 +41,11 @@ test("the demo workspace links to the setup guide", async ({ page }) => {
   await expect(dialog).toBeVisible();
   await dialog.getByRole("button", { name: "Close the video" }).click();
   await expect(dialog).toBeHidden();
+});
+
+test("a trial workspace keeps the setup guide in the side menu on every page", async ({ page }) => {
+  await signUpAndOnboard(page);
+  await page.goto("/app/properties");
+  await page.locator("aside").getByRole("button", { name: "Watch the 2-minute setup guide" }).click();
+  await expect(page.getByRole("dialog", { name: GUIDE })).toBeVisible();
 });
