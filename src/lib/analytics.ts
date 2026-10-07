@@ -33,7 +33,8 @@ export type EventName =
   | "member_invited"
   | "member_joined"
   | "calculator_used"
-  | "pricing_viewed";
+  | "pricing_viewed"
+  | "landing_visited";
 
 export async function track(
   name: EventName,

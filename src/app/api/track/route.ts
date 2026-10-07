@@ -4,7 +4,7 @@ import { clientIp, rateLimit } from "@/lib/security/rate-limit";
 export const dynamic = "force-dynamic";
 
 /** Anonymous marketing-site events (sendBeacon). Only allow-listed names are accepted. */
-const PUBLIC_EVENTS: EventName[] = ["calculator_used", "pricing_viewed"];
+const PUBLIC_EVENTS: EventName[] = ["calculator_used", "pricing_viewed", "landing_visited"];
 
 export async function POST(req: Request) {
   const raw = await req.text();
