@@ -64,11 +64,11 @@ Keep a sheet: `Agency · Company type (Ltd/LLP/partnership/sole trader) · City 
 Each email has to work on its own: someone who reads only that one should understand the problem, see their own deadline and know where to click. None of them asks for a call. Put `?from=email1` (email2, …) on the links so the analytics show which email works (`demo_started` and `signup_completed` record it).
 
 ### Email 1 — Day 0
-**Subject:** Damp reports from today: investigate by Tue 20 Oct
+**Subject:** Awaab's Law is live. Never miss a mould deadline
 
 > Hi **Fiona**,
 >
-> Since 6 October, every damp or mould report in a Scottish rented home has a legal clock: 10 working days to get it investigated, 3 more to send the tenant a written summary, and repairs must start within 5. A report **Lothian & Forth** receives today has to be investigated by **Tuesday 20 October**.
+> Since 6 October, every damp or mould report in a Scottish rented home has a legal clock: 10 working days to get it investigated, 3 more to send the tenant a written summary, and repairs must start within 5. A report **Lothian & Forth** receives today has to be investigated by **Wednesday 21 October**.
 >
 > I built RepairClock for letting agents. You log the report and it counts every deadline (Scottish bank holidays included), gets the landlord's approval with one link, writes the tenant's letters and keeps a record you could show a tribunal.
 >
@@ -76,6 +76,8 @@ Each email has to work on its own: someone who reads only that one should unders
 >
 > **[Your name]**, RepairClock
 > Reply "no thanks" and I won't email again.
+
+The date is 10 working days after the day you send: Wednesday 21 October for an email sent on 7 October, Thursday 22 October on the 8th. For any other day, use repairclock.bygauthier.com/tools/deadline-calculator.
 
 ### Email 2 — Day 4
 **Subject:** The slow part is the landlord
