@@ -101,6 +101,19 @@ After email 4, stop. You can contact non-responders once more in a month with ge
   ```
 
   Some company email filters open links by themselves, so a few visits may be robots.
+
+- **Where to see activity.** Everything is anonymous: you see what visitors do, not who they are. An agency's name only appears when it signs up.
+  - **Vercel → your project → Analytics** (click **Enable** once): visitors, the pages they open, where they came from, country and device, without cookies.
+  - **Neon → SQL Editor**, for what they do on the site and in the product (email visits, video plays, demos, sign-ups, reports logged…) over the last 7 days:
+
+    ```sql
+    select name, count(*) as times
+    from analytics_events
+    where created_at > now() - interval '7 days' and (not is_demo or name = 'demo_started')
+    group by name order by times desc;
+    ```
+
+    For video plays by video and page: `select props->>'video', props->>'page', count(*) from analytics_events where name = 'video_played' group by 1, 2;`
 - Send the day's emails (new agencies get email 1; earlier ones get their next email).
 - Answer every reply the same day.
 - Look at new sign-ups: if one gets stuck (for example, signed up but no homes), send a two-line personal email offering to import their CSV.
