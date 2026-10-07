@@ -16,8 +16,13 @@ explained in [FIRST_10_CUSTOMERS.md](../FIRST_10_CUSTOMERS.md).
   a day from this address.
 - **Only companies:** Ltd, LLP or Scottish partnerships. Skip sole traders (UK law needs their
   consent first).
-- **Plain text only:** no images, no attachments, one link per email. Keep the "no thanks" line,
-  and honour it the same day.
+- **One link, to the home page:** each email points to repairclock.bygauthier.com, where the
+  agency finds the 90-second video, the step-by-step guide and the live demo, and chooses. In
+  Gmail, select the address in the email, press Ctrl+K (Cmd+K on a Mac) and paste the email's
+  tracked link (`https://repairclock.bygauthier.com/?from=email1`, …). The site then counts each
+  visit with the email it came from.
+- **Plain text only:** no images, no attachments. Keep the "no thanks" line, and honour it the
+  same day.
 - **Optional:** set your Gmail sender name to "{Your name} · RepairClock" (Settings → Accounts →
   Send mail as → edit info), so the brand shows above the subject.
 
@@ -54,6 +59,8 @@ For a later day, use repairclock.bygauthier.com/tools/deadline-calculator.
 
 **Subject:** Awaab's Law is live. Never miss a mould deadline
 
+**Link:** `https://repairclock.bygauthier.com/?from=email1`
+
 ```
 Hi {First name},
 
@@ -61,7 +68,9 @@ Since 6 October, every damp or mould report in a Scottish rented home has a lega
 
 I built RepairClock for letting agents. You log the report and it counts every deadline (Scottish bank holidays included), gets the landlord's approval with one link, writes the tenant's letters and keeps a record you could show a tribunal.
 
-There's a sample agency you can click around, no sign-up: repairclock.bygauthier.com/demo?from=email1
+Everything is on the site, so you can judge for yourself: a 90-second video, a step-by-step setup guide and a live demo agency to click around. Then it's 14 days free, no card needed.
+
+repairclock.bygauthier.com
 
 {Your name}, RepairClock
 Reply "no thanks" and I won't email again.
@@ -73,6 +82,8 @@ Reply "no thanks" and I won't email again.
 
 Other options: "The 10-day clock won't wait for your landlord" · "The slow part is the landlord"
 
+**Link:** `https://repairclock.bygauthier.com/?from=email2`
+
 ```
 Hi {First name},
 
@@ -80,7 +91,7 @@ The deadline most agents worry about isn't the investigation itself. It's waitin
 
 In RepairClock the landlord gets a link showing the work, the cost and the legal deadline. They approve or decline with one tap, no login, and their answer is saved on the case with the date and time. Reminders go out automatically until they answer.
 
-You can try it on the "Dalmeny Street" case in the demo: repairclock.bygauthier.com/demo?from=email2
+You can watch it in the 90-second video, or try it on the "Dalmeny Street" case in the live demo. The trial is 14 days free, no card needed: repairclock.bygauthier.com
 
 {Your name}
 Reply "no thanks" and I won't email again.
@@ -92,6 +103,8 @@ Reply "no thanks" and I won't email again.
 
 Other options: "The Christmas trap in Awaab's Law" · "Mould report on 18 Dec? Investigated by 7 Jan"
 
+**Link:** `https://repairclock.bygauthier.com/?from=email3`
+
 ```
 Hi {First name},
 
@@ -99,7 +112,7 @@ One for the diary: with the Christmas and New Year bank holidays, a damp report 
 
 RepairClock emails your team every weekday morning with anything overdue, due today or due in the next 2 working days, across every home you manage.
 
-Free 14-day trial, no card: repairclock.bygauthier.com/signup?from=email3. Use code FOUNDING20 at checkout for 20% off for your first year (offer ends 31 October).
+Setting up takes about 10 minutes, and the step-by-step guide on the site shows every click. It's 14 days free, no card needed, and code FOUNDING20 takes 20% off your first year (until 31 October): repairclock.bygauthier.com
 
 {Your name}
 Reply "no thanks" and I won't email again.
@@ -111,8 +124,10 @@ Reply "no thanks" and I won't email again.
 
 Other option: "{First name}, should I stop here?"
 
+**Link:** `https://repairclock.bygauthier.com/?from=email4`
+
 ```
-Hi {First name}, this is my last email. If damp and mould deadlines are already covered at {Agency}, great. If not, the free calculator shows any report's deadlines in seconds, and it's yours to use either way: repairclock.bygauthier.com/tools/deadline-calculator?from=email4
+Hi {First name}, this is my last email. If damp and mould deadlines are already covered at {Agency}, great. If not, everything is on the site, including a free deadline calculator you can use either way: repairclock.bygauthier.com
 
 {Your name}
 ```

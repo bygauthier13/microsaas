@@ -61,60 +61,18 @@ Keep a sheet: `Agency · Company type (Ltd/LLP/partnership/sole trader) · City 
 
 ## 4. The emails
 
-Ready to copy into Gmail, with the fields to fill in and each sending day's deadline: [EMAIL TO SEND/TEMPLATES.md](EMAIL%20TO%20SEND/TEMPLATES.md).
+The full text, ready to copy into Gmail with the fields to fill in and each sending day's deadline, is in [EMAIL TO SEND/TEMPLATES.md](EMAIL%20TO%20SEND/TEMPLATES.md).
 
-Each email has to work on its own: someone who reads only that one should understand the problem, see their own deadline and know where to click. None of them asks for a call. Put `?from=email1` (email2, …) on the links so the analytics show which email works (`demo_started` and `signup_completed` record it).
+Each email has to work on its own: someone who reads only that one should understand the problem, see their own deadline and know where to click. None of them asks for a call. Each email's link ends in `?from=email1` (email2, …): the site records every visit from it as `landing_visited` with the email's name, so you can see which email gets clicks. Sign-ups show the agency's name, so match them to your sheet.
 
-### Email 1 — Day 0
-**Subject:** Awaab's Law is live. Never miss a mould deadline
+| Email | When | Subject | What it says |
+| --- | --- | --- | --- |
+| 1 | Day 0 | Awaab's Law is live. Never miss a mould deadline | The new clock, with the date a report they get today must be investigated by |
+| 2 | Day 4 | Stop chasing landlords for repair approval | The one-tap landlord approval link |
+| 3 | Day 9 | Christmas will eat your damp deadlines | Bank holidays shrink the window; the morning digest; FOUNDING20 |
+| 4 | Day 16 | Last one from me | Short goodbye, the free calculator |
 
-> Hi **Fiona**,
->
-> Since 6 October, every damp or mould report in a Scottish rented home has a legal clock: 10 working days to get it investigated, 3 more to send the tenant a written summary, and repairs must start within 5. A report **Lothian & Forth** receives today has to be investigated by **Wednesday 21 October**.
->
-> I built RepairClock for letting agents. You log the report and it counts every deadline (Scottish bank holidays included), gets the landlord's approval with one link, writes the tenant's letters and keeps a record you could show a tribunal.
->
-> There's a sample agency you can click around, no sign-up: **repairclock.bygauthier.com/demo?from=email1**
->
-> **[Your name]**, RepairClock
-> Reply "no thanks" and I won't email again.
-
-The date is 10 working days after the day you send: Wednesday 21 October for an email sent on 7 October, Thursday 22 October on the 8th. For any other day, use repairclock.bygauthier.com/tools/deadline-calculator.
-
-### Email 2 — Day 4
-**Subject:** Stop chasing landlords for repair approval
-
-> Hi **Fiona**,
->
-> The deadline most agents worry about isn't the investigation itself. It's waiting for the landlord to approve the spend while the 10 working days run.
->
-> In RepairClock the landlord gets a link showing the work, the cost and the legal deadline. They approve or decline with one tap, no login, and their answer is saved on the case with the date and time. Reminders go out automatically until they answer.
->
-> You can try it on the "Dalmeny Street" case in the demo: **repairclock.bygauthier.com/demo?from=email2**
->
-> **[Your name]**
-> Reply "no thanks" and I won't email again.
-
-### Email 3 — Day 9
-**Subject:** Christmas will eat your damp deadlines
-
-> Hi **Fiona**,
->
-> One for the diary: with the Christmas and New Year bank holidays, a damp report received on **Friday 18 December** must be investigated by **Thursday 7 January**, while most contractors are off.
->
-> RepairClock emails your team every weekday morning with anything overdue, due today or due in the next 2 working days, across every home you manage.
->
-> Free 14-day trial, no card: **repairclock.bygauthier.com/signup?from=email3**. Use code **FOUNDING20** at checkout for 20% off for your first year (offer ends 31 October).
->
-> **[Your name]**
-> Reply "no thanks" and I won't email again.
-
-### Email 4 — Day 16 (last)
-**Subject:** Last one from me
-
-> Hi **Fiona**, this is my last email. If damp and mould deadlines are already covered at **Lothian & Forth**, great. If not, the free calculator shows any report's deadlines in seconds, and it's yours to use either way: **repairclock.bygauthier.com/tools/deadline-calculator?from=email4**
->
-> **[Your name]**
+Each one links to the home page, where the agency finds the 90-second video, the step-by-step guide and the live demo, and chooses what to look at. Emails 1 to 3 also say the trial is 14 days free with no card.
 
 After email 4, stop. You can contact non-responders once more in a month with genuinely new news (e.g. England's Phase 2 on 30 November, or a new feature).
 
@@ -134,7 +92,15 @@ After email 4, stop. You can contact non-responders once more in a month with ge
 
 ## 6. Each day
 
-- Morning: check the analytics for new demos, sign-ups and payments (SQL on `analytics_events`, or PostHog).
+- Morning: check the analytics for new demos, sign-ups and payments (SQL on `analytics_events` in the Neon SQL editor, or PostHog). Visits per email:
+
+  ```sql
+  select props->>'campaign' as email, count(*) as visits
+  from analytics_events where name = 'landing_visited'
+  group by 1 order by 1;
+  ```
+
+  Some company email filters open links by themselves, so a few visits may be robots.
 - Send the day's emails (new agencies get email 1; earlier ones get their next email).
 - Answer every reply the same day.
 - Look at new sign-ups: if one gets stuck (for example, signed up but no homes), send a two-line personal email offering to import their CSV.
