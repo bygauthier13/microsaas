@@ -30,7 +30,10 @@ export default function PrivacyPage() {
           <li>Billing information — handled by Stripe; we never see full card numbers (contract, legal obligation).</li>
           <li>Product usage events (e.g. &ldquo;case created&rdquo;) — to improve the product and support you (legitimate interests). Demo-workspace activity is flagged and excluded.</li>
           <li>Security logs and rate-limiting data — to protect the service (legitimate interests).</li>
-          <li>Marketing-site analytics — anonymous counts of page and tool use (legitimate interests).</li>
+          <li>
+            Marketing-site analytics — anonymous, cookie-free counts of visits, page and tool use and video plays, measured by RepairClock and Vercel Web Analytics
+            (legitimate interests).
+          </li>
         </ul>
 
         <h2>Sub-processors</h2>

@@ -4,7 +4,17 @@ import { useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import clsx from "clsx";
 import { Play, X } from "lucide-react";
+import { sendEvent } from "@/components/marketing/beacon";
 import { VIDEOS } from "@/lib/videos";
+
+/** Records that someone started a video, and where (anonymous, once per player). */
+function countPlay(src: string, counted: { current: boolean }) {
+  if (counted.current) return;
+  counted.current = true;
+  const path = window.location.pathname;
+  const page = path === "/" ? "home" : path.startsWith("/guide") ? "guide" : path.startsWith("/app") ? "app" : "other";
+  sendEvent("video_played", { video: src.split("/").pop()?.replace(/\.mp4$/, "") ?? src, page });
+}
 
 /** The round play button drawn over a video's poster. */
 export function PlayBadge({ size = "lg" }: { size?: "md" | "lg" }) {
@@ -25,6 +35,7 @@ const frame = "relative overflow-hidden rounded-2xl border border-line bg-ink sh
 /** A video that only loads once someone presses play; `label` names the play button. */
 export function Video({ src, poster, title, label, className }: { src: string; poster: string; title: string; label: string; className?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const counted = useRef(false);
   const [started, setStarted] = useState(false);
   return (
     <div className={clsx(frame, className)}>
@@ -44,6 +55,7 @@ export function Video({ src, poster, title, label, className }: { src: string; p
           type="button"
           onClick={() => {
             setStarted(true);
+            countPlay(src, counted);
             void ref.current?.play().catch(() => {});
           }}
           className="group absolute inset-0 flex items-center justify-center bg-ink/5 hover:bg-transparent"
@@ -77,12 +89,14 @@ export function ChapteredVideo({
   className?: string;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const counted = useRef(false);
   const [started, setStarted] = useState(false);
   const [time, setTime] = useState(0);
   const play = (at?: number) => {
     const v = ref.current;
     if (!v) return;
     setStarted(true);
+    countPlay(src, counted);
     if (at !== undefined) v.currentTime = at;
     void v.play().catch(() => {});
   };
@@ -137,6 +151,7 @@ export function ChapteredVideo({
 export function GuideVideoButton({ className, children }: { className?: string; children: ReactNode }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const video = useRef<HTMLVideoElement>(null);
+  const counted = useRef(false);
   return (
     <>
       <button
@@ -144,6 +159,7 @@ export function GuideVideoButton({ className, children }: { className?: string; 
         className={className}
         onClick={() => {
           dialog.current?.showModal();
+          countPlay(VIDEOS.guide.src, counted);
           void video.current?.play().catch(() => {});
         }}
       >
