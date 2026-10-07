@@ -61,6 +61,8 @@ Keep a sheet: `Agency · Company type (Ltd/LLP/partnership/sole trader) · City 
 
 ## 4. The emails
 
+Ready to copy into Gmail, with the fields to fill in and each sending day's deadline: [EMAIL TO SEND/TEMPLATES.md](EMAIL%20TO%20SEND/TEMPLATES.md).
+
 Each email has to work on its own: someone who reads only that one should understand the problem, see their own deadline and know where to click. None of them asks for a call. Put `?from=email1` (email2, …) on the links so the analytics show which email works (`demo_started` and `signup_completed` record it).
 
 ### Email 1 — Day 0
@@ -80,7 +82,7 @@ Each email has to work on its own: someone who reads only that one should unders
 The date is 10 working days after the day you send: Wednesday 21 October for an email sent on 7 October, Thursday 22 October on the 8th. For any other day, use repairclock.bygauthier.com/tools/deadline-calculator.
 
 ### Email 2 — Day 4
-**Subject:** The slow part is the landlord
+**Subject:** Stop chasing landlords for repair approval
 
 > Hi **Fiona**,
 >
@@ -94,7 +96,7 @@ The date is 10 working days after the day you send: Wednesday 21 October for an 
 > Reply "no thanks" and I won't email again.
 
 ### Email 3 — Day 9
-**Subject:** A report on 18 December → investigated by 7 January
+**Subject:** Christmas will eat your damp deadlines
 
 > Hi **Fiona**,
 >
